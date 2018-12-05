@@ -1,0 +1,55 @@
+buildscript {
+    ext {
+        springBootVersion = '2.1.1.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+group = 'io.leres'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    // Data JPA
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.1.1.RELEASE'
+
+    // HSQLDB
+    compile group: 'org.hsqldb', name: 'hsqldb', version: '2.3.1'
+
+    // H2
+    compile group: 'com.h2database', name: 'h2', version: '1.4.197'
+
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+
+    // lombok
+    compile group: 'org.projectlombok', name: 'lombok', version: '1.18.4'
+
+    // guava
+    compile group: 'com.google.guava', name: 'guava', version: '27.0.1-jre'
+
+    // jackson
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.7'
+
+    // mockito
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '2.23.4'
+
+    // assertj
+    testCompile group: 'org.assertj', name: 'assertj-core', version: '3.11.1'
+}
