@@ -1,28 +1,31 @@
 package io.leres.exams.services;
 
+import io.leres.UnitTests;
 import io.leres.classes.ClassFinder;
+import io.leres.classes.UniClassFixture;
 import io.leres.curriculums.CurriculumPoster;
-import io.leres.entities.Exam;
-import io.leres.entities.ExamResult;
-import io.leres.entities.Student;
+import io.leres.entities.*;
 import io.leres.exams.ExamFixtures;
 import io.leres.exams.exceptions.ExamNotFound;
 import io.leres.exams.exceptions.ExamResultNotFound;
 import io.leres.exams.repo.ExamRepository;
 import io.leres.exams.repo.ExamResultRepository;
+import io.leres.fixtures.TeacherFixture;
 import io.leres.students.StudentFixture;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.mockito.AdditionalAnswers;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.time.Instant;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
+@Category(UnitTests.class)
 public class ExamServiceTest {
 
     private ExamRepository examRepositoryMock;
@@ -55,6 +58,10 @@ public class ExamServiceTest {
         when(examResultRepositoryMock.save(
                 any(ExamResult.class)
         )).thenAnswer(AdditionalAnswers.returnsFirstArg());
+
+        doNothing().when(curriculumPoster).addTextMessageToCurriculum(
+                any(Teacher.class), any(UniClass.class), anyInt(), anyString()
+        );
     }
 
     @Test(expected = ExamNotFound.class)
@@ -77,7 +84,7 @@ public class ExamServiceTest {
     @Test
     @Ignore
     public void testGettingRecentExamsForStudent() {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     @Test
@@ -111,5 +118,17 @@ public class ExamServiceTest {
 
         assertThat(examResult).isNotNull();
         verify(examResultRepositoryMock).findById(1L);
+    }
+
+    @Test
+    public void testSchedulingExam() {
+        Teacher teacher = TeacherFixture.getDefaultProfessor();
+        Instant instant = Instant.now();
+        UniClass uniClass = UniClassFixture.getDefaultClass();
+
+        examService.scheduleExam(teacher, instant, uniClass);
+
+        verify(examRepositoryMock).save(any(Exam.class));
+
     }
 }

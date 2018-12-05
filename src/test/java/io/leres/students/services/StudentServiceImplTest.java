@@ -1,5 +1,6 @@
 package io.leres.students.services;
 
+import io.leres.UnitTests;
 import io.leres.entities.PersonData;
 import io.leres.entities.Student;
 import io.leres.students.StudentFixture;
@@ -8,6 +9,7 @@ import io.leres.students.exceptions.StudentNotFound;
 import io.leres.students.repo.StudentRepository;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.mockito.AdditionalAnswers;
 
 import java.util.Arrays;
@@ -20,6 +22,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
+@Category(UnitTests.class)
 public class StudentServiceImplTest {
 
     private StudentRepository studentRepositoryMock;

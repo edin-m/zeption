@@ -1,5 +1,6 @@
 package io.leres.classes.services;
 
+import io.leres.UnitTests;
 import io.leres.classes.Enrolement;
 import io.leres.classes.exceptions.StudentAlreadyEnrolled;
 import io.leres.classes.exceptions.UniClassNotFound;
@@ -11,6 +12,7 @@ import io.leres.fixtures.TeacherFixture;
 import io.leres.students.StudentFixture;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.mockito.AdditionalAnswers;
 
 import java.time.Instant;
@@ -23,6 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
+@Category(UnitTests.class)
 public class ClassServiceTest {
 
     private UniClassRepository uniClassRepositoryMock;

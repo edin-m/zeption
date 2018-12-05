@@ -7,7 +7,6 @@ import io.leres.exams.exceptions.ExamNotFound;
 import io.leres.exams.exceptions.ExamResultNotFound;
 import io.leres.exams.repo.ExamRepository;
 import io.leres.exams.repo.ExamResultRepository;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.time.Instant;
 import java.util.List;
@@ -40,7 +39,7 @@ class ExamServiceImpl implements ExamService {
 
     @Override
     public List<Exam> getRecentExamsForStudent(Student student) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     @Override

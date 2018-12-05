@@ -1,5 +1,6 @@
 package io.leres.curriculums.services;
 
+import io.leres.UnitTests;
 import io.leres.classes.ClassManager;
 import io.leres.classes.UniClassFixture;
 import io.leres.curriculums.repo.CurriculumEntryRepository;
@@ -9,11 +10,13 @@ import io.leres.entities.UniClass;
 import io.leres.fixtures.TeacherFixture;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.mockito.AdditionalAnswers;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@Category(UnitTests.class)
 public class CurriculumServiceTest {
 
     private CurriculumEntryRepository curriculumEntryRepositoryMock;
