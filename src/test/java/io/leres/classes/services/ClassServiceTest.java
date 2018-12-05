@@ -4,14 +4,18 @@ import io.leres.classes.Enrolement;
 import io.leres.classes.exceptions.StudentAlreadyEnrolled;
 import io.leres.classes.exceptions.UniClassNotFound;
 import io.leres.classes.repo.UniClassRepository;
-import io.leres.entities.PersonData;
 import io.leres.entities.Student;
 import io.leres.entities.Teacher;
 import io.leres.entities.UniClass;
+import io.leres.fixtures.TeacherFixture;
+import io.leres.students.StudentFixture;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.AdditionalAnswers;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,9 +49,8 @@ public class ClassServiceTest {
 
     @Test(expected = StudentAlreadyEnrolled.class)
     public void testEnrollingAlreadyEnrolledStudentThrows() throws StudentAlreadyEnrolled {
-        Student student = new Student(
-                new PersonData("first", "last", "0123")
-        );
+        Student student = StudentFixture.getDefaultStudent();
+
         exampleClass.addStudentToEnrolledStudents(student);
 
         classService.enrollStudentToClass(student, exampleClass);
@@ -55,9 +58,7 @@ public class ClassServiceTest {
 
     @Test
     public void testEnrollingStudentToClass() throws StudentAlreadyEnrolled {
-        Student student = new Student(
-                new PersonData("first", "last", "0123")
-        );
+        Student student = StudentFixture.getDefaultStudent();
 
         Enrolement enrolement = classService.enrollStudentToClass(student, exampleClass);
 
@@ -67,12 +68,23 @@ public class ClassServiceTest {
 
     @Test
     public void testAssigningTeacherToUniClass() {
-        Teacher teacher = new Teacher(new PersonData("first", "last", "0123"), Teacher.TeacherType.PROFESSOR);
+        Teacher teacher = TeacherFixture.getDefaultProfessor();
 
         classService.assignTeacherToUniClass(teacher, exampleClass);
 
         assertThat(exampleClass.getTeacher()).isEqualTo(teacher);
         verify(uniClassRepositoryMock).save(any(UniClass.class));
+    }
+
+    @Test
+    public void testCalculatingWeekOfClass() {
+        Instant startDate = LocalDate.parse("2018-12-08").atStartOfDay().toInstant(ZoneOffset.UTC);
+        exampleClass.setStartDate(startDate);
+        Instant timeOfInterest = LocalDate.parse("2018-12-10").atStartOfDay().toInstant(ZoneOffset.UTC);
+
+        int weekOfClass = classService.calculateWeekOfClass(exampleClass, timeOfInterest);
+
+        assertThat(weekOfClass).isEqualTo(2);
     }
 
     @Test(expected = UniClassNotFound.class)

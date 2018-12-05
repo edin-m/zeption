@@ -1,14 +1,19 @@
 package io.leres.classes.services;
 
 import io.leres.classes.Enrolement;
-import io.leres.classes.exceptions.UniClassNotFound;
 import io.leres.classes.exceptions.StudentAlreadyEnrolled;
+import io.leres.classes.exceptions.UniClassNotFound;
 import io.leres.classes.repo.UniClassRepository;
 import io.leres.entities.Student;
 import io.leres.entities.Teacher;
 import io.leres.entities.UniClass;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 @Service
@@ -47,6 +52,16 @@ class ClassServiceImpl implements ClassService {
         }
 
         return uniClass.get();
+    }
+
+    @Override
+    public int calculateWeekOfClass(UniClass uniClass, Instant forTime) {
+        ZonedDateTime start = uniClass.getStartDate().atZone(ZoneId.of("UTC"));
+        start = start.with(DayOfWeek.MONDAY);
+        ZonedDateTime atTime = forTime.atZone(ZoneId.of("UTC"));
+
+        long weeks = ChronoUnit.WEEKS.between(start.toLocalDate(), atTime.toLocalDate());
+        return Math.toIntExact(weeks + 1);
     }
 
     @Override

@@ -1,11 +1,10 @@
 package io.leres.exams.services;
 
+import io.leres.classes.ClassFinder;
 import io.leres.curriculums.CurriculumPoster;
-import io.leres.entities.Exam;
-import io.leres.entities.ExamResult;
-import io.leres.entities.Student;
-import io.leres.entities.Teacher;
+import io.leres.entities.*;
 import io.leres.exams.exceptions.ExamNotFound;
+import io.leres.exams.exceptions.ExamResultNotFound;
 import io.leres.exams.repo.ExamRepository;
 import io.leres.exams.repo.ExamResultRepository;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -13,18 +12,19 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 class ExamServiceImpl implements ExamService {
 
     private ExamRepository examRepository;
     private ExamResultRepository examResultRepository;
     private CurriculumPoster curriculumPoster;
+    private ClassFinder classFinder;
 
-    public ExamServiceImpl(ExamRepository examRepository, ExamResultRepository examResultRepository, CurriculumPoster curriculumPoster) {
+    public ExamServiceImpl(ExamRepository examRepository, ExamResultRepository examResultRepository, CurriculumPoster curriculumPoster, ClassFinder classFinder) {
         this.examRepository = examRepository;
         this.examResultRepository = examResultRepository;
         this.curriculumPoster = curriculumPoster;
+        this.classFinder = classFinder;
     }
 
     @Override
@@ -44,23 +44,30 @@ class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public ExamResult storeExamResult(Exam exam, Student student, long grade) {
-        
+    public ExamResult storeExamResult(Exam exam, Student student, int grade) {
+        ExamResult examResult = new ExamResult(exam, student, grade);
+        return examResultRepository.save(examResult);
     }
 
     @Override
-    public ExamResult getExamResult(long examResultId) {
-        return null;
+    public ExamResult getExamResultById(long examResultId) throws ExamResultNotFound {
+        Optional<ExamResult> examResult = examResultRepository.findById(examResultId);
+
+        if (!examResult.isPresent()) {
+            throw new ExamResultNotFound(examResultId);
+        }
+
+        return examResult.get();
     }
 
     @Override
-    public List<ExamResult> getExamResultsByExam(Exam exam) {
-        return null;
-    }
+    public void scheduleExam(Teacher signOffTeacher, Instant timeAt, UniClass uniClass) {
+        Exam exam = new Exam(signOffTeacher, timeAt);
 
-    @Override
-    public void scheduleExam(Teacher signOffTeacher, Instant timeAt, Set<Teacher> attendingTeachers) {
-        // create exam
-        // create curriculum entry
+        examRepository.save(exam);
+
+        int weekOfClass = classFinder.calculateWeekOfClass(uniClass, timeAt);
+        String description = String.format("Exam scheduled for week %s", weekOfClass);
+        curriculumPoster.addTextMessageToCurriculum(signOffTeacher, uniClass, weekOfClass, description);
     }
 }

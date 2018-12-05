@@ -6,6 +6,6 @@ import io.leres.entities.Student;
 
 public interface ExamResultCreator {
 
-    ExamResult storeExamResult(Exam exam, Student student, long grade);
+    ExamResult storeExamResult(Exam exam, Student student, int grade);
 
 }

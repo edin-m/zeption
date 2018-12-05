@@ -2,6 +2,7 @@ package io.leres.entities;
 
 import lombok.*;
 
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.time.Instant;
@@ -20,6 +21,9 @@ public class Exam extends Resource {
 
     private Instant takenAt = Instant.now();
 
+    @ManyToOne
+    private UniClass uniClass;
+
     @OneToMany
     private Set<Student> participants = new HashSet<>();
 
@@ -28,5 +32,10 @@ public class Exam extends Resource {
 
     @OneToMany
     private Set<ExamResult> results = new HashSet<>();
+
+    public Exam(Teacher signOffTeacher, Instant takenAt) {
+        this.signOffTeacher = signOffTeacher;
+        this.takenAt = takenAt;
+    }
 
 }
