@@ -7,12 +7,13 @@ import io.leres.exams.exceptions.ExamNotFound;
 import io.leres.exams.exceptions.ExamResultNotFound;
 import io.leres.exams.repo.ExamRepository;
 import io.leres.exams.repo.ExamResultRepository;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 class ExamServiceImpl implements ExamService {
 
     private ExamRepository examRepository;

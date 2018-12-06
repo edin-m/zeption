@@ -1,5 +1,6 @@
 package io.leres.controllers;
 
+import io.leres.controllers.exceptions.StudentIdMismatch;
 import io.leres.entities.Student;
 import io.leres.students.StudentCreator;
 import io.leres.students.StudentRetriever;
@@ -40,7 +41,11 @@ public class StudentController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/students/{id}")
-    public Student updateStudent(@RequestBody Student student) throws StudentNotFound {
+    public Student updateStudent(@RequestBody Student student, @PathVariable("id") long studentId)
+            throws StudentNotFound, StudentIdMismatch {
+        if (studentId != student.getId()) {
+            throw new StudentIdMismatch(student, studentId);
+        }
         return studentUpdater.updateStudent(student);
     }
 

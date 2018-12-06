@@ -10,7 +10,12 @@ buildscript {
     }
 }
 
+plugins {
+    id 'scala'
+}
+
 apply plugin: 'java'
+apply plugin: 'scala'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
@@ -52,6 +57,11 @@ dependencies {
 
     // assertj
     testCompile group: 'org.assertj', name: 'assertj-core', version: '3.11.1'
+
+    // scala
+    implementation 'org.scala-lang:scala-library:2.11.12'
+    testImplementation 'org.scalatest:scalatest_2.11:3.0.0'
+    testImplementation 'junit:junit:4.12'
 }
 
 task unitTests(type: Test) {

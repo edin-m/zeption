@@ -2,6 +2,7 @@ package io.leres.entities;
 
 import lombok.*;
 
+import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -9,6 +10,7 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

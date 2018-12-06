@@ -5,7 +5,9 @@ import io.leres.curriculums.repo.CurriculumEntryRepository;
 import io.leres.entities.CurriculumEntry;
 import io.leres.entities.Teacher;
 import io.leres.entities.UniClass;
+import org.springframework.stereotype.Service;
 
+@Service
 class CurriculumServiceImpl implements CurriculumService {
 
     private CurriculumEntryRepository curriculumEntryRepository;
