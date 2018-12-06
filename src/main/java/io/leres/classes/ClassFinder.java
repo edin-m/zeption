@@ -9,6 +9,6 @@ public interface ClassFinder {
 
     UniClass getUniClassForId(long uniClassId) throws UniClassNotFound;
 
-    int calculateWeekOfClass(UniClass uniClass, Instant forTime);
+    int findWeekOfClass(UniClass uniClass, Instant forTime);
 
 }

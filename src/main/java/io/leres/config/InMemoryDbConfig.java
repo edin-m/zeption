@@ -3,7 +3,10 @@ package io.leres.config;
 import io.leres.classes.repo.UniClassRepository;
 import io.leres.curriculums.repo.CurriculumEntryRepository;
 import io.leres.entities.Student;
+import io.leres.exams.repo.ExamRepository;
+import io.leres.exams.repo.ExamResultRepository;
 import io.leres.students.repo.StudentRepository;
+import io.leres.teachers.repo.TeacherRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -23,7 +26,10 @@ import javax.sql.DataSource;
 @EnableJpaRepositories(basePackageClasses = {
         StudentRepository.class,
         UniClassRepository.class,
-        CurriculumEntryRepository.class
+        CurriculumEntryRepository.class,
+        TeacherRepository.class,
+        ExamRepository.class,
+        ExamResultRepository.class
 })
 public class InMemoryDbConfig {
 

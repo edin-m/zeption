@@ -7,8 +7,7 @@ import io.leres.entities.UniClass;
 
 public interface EnrollementService {
 
-    Enrolement enrollStudentToClass(Student student, UniClass uniClass)
-            throws StudentAlreadyEnrolled;
+    Enrolement enrollStudentToClass(Student student, UniClass uniClass) throws StudentAlreadyEnrolled;
 
     void assignTeacherToUniClass(Teacher teacher, UniClass uniClass);
 

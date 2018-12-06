@@ -53,3 +53,17 @@ dependencies {
     // assertj
     testCompile group: 'org.assertj', name: 'assertj-core', version: '3.11.1'
 }
+
+task unitTests(type: Test) {
+    useJUnit {
+        includeCategories 'io.leres.UnitTests'
+        excludeCategories 'io.leres.IntegrationTests'
+    }
+}
+
+task integrationTests(type: Test) {
+    useJUnit {
+        excludeCategories 'io.leres.UnitTests'
+        includeCategories 'io.leres.IntegrationTests'
+    }
+}

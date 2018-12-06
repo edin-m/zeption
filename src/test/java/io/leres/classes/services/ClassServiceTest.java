@@ -8,7 +8,7 @@ import io.leres.classes.repo.UniClassRepository;
 import io.leres.entities.Student;
 import io.leres.entities.Teacher;
 import io.leres.entities.UniClass;
-import io.leres.fixtures.TeacherFixture;
+import io.leres.teachers.TeacherFixture;
 import io.leres.students.StudentFixture;
 import org.junit.Before;
 import org.junit.Test;
@@ -85,7 +85,7 @@ public class ClassServiceTest {
         exampleClass.setStartDate(startDate);
         Instant timeOfInterest = LocalDate.parse("2018-12-10").atStartOfDay().toInstant(ZoneOffset.UTC);
 
-        int weekOfClass = classService.calculateWeekOfClass(exampleClass, timeOfInterest);
+        int weekOfClass = classService.findWeekOfClass(exampleClass, timeOfInterest);
 
         assertThat(weekOfClass).isEqualTo(2);
     }

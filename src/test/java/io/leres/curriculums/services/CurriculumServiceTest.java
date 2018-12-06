@@ -7,7 +7,7 @@ import io.leres.curriculums.repo.CurriculumEntryRepository;
 import io.leres.entities.CurriculumEntry;
 import io.leres.entities.Teacher;
 import io.leres.entities.UniClass;
-import io.leres.fixtures.TeacherFixture;
+import io.leres.teachers.TeacherFixture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;

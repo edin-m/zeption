@@ -10,7 +10,7 @@ import io.leres.exams.exceptions.ExamNotFound;
 import io.leres.exams.exceptions.ExamResultNotFound;
 import io.leres.exams.repo.ExamRepository;
 import io.leres.exams.repo.ExamResultRepository;
-import io.leres.fixtures.TeacherFixture;
+import io.leres.teachers.TeacherFixture;
 import io.leres.students.StudentFixture;
 import org.junit.Before;
 import org.junit.Ignore;

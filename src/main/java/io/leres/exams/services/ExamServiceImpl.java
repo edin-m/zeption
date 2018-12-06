@@ -7,6 +7,7 @@ import io.leres.exams.exceptions.ExamNotFound;
 import io.leres.exams.exceptions.ExamResultNotFound;
 import io.leres.exams.repo.ExamRepository;
 import io.leres.exams.repo.ExamResultRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
@@ -60,13 +61,15 @@ class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public void scheduleExam(Teacher signOffTeacher, Instant timeAt, UniClass uniClass) {
+    public Exam scheduleExam(Teacher signOffTeacher, Instant timeAt, UniClass uniClass) {
         Exam exam = new Exam(signOffTeacher, timeAt);
 
-        examRepository.save(exam);
+        exam = examRepository.save(exam);
 
-        int weekOfClass = classFinder.calculateWeekOfClass(uniClass, timeAt);
+        int weekOfClass = classFinder.findWeekOfClass(uniClass, timeAt);
         String description = String.format("Exam scheduled for week %s", weekOfClass);
         curriculumPoster.addTextMessageToCurriculum(signOffTeacher, uniClass, weekOfClass, description);
+
+        return exam;
     }
 }

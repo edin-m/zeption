@@ -55,7 +55,7 @@ class ClassServiceImpl implements ClassService {
     }
 
     @Override
-    public int calculateWeekOfClass(UniClass uniClass, Instant forTime) {
+    public int findWeekOfClass(UniClass uniClass, Instant forTime) {
         ZonedDateTime start = uniClass.getStartDate().atZone(ZoneId.of("UTC"));
         start = start.with(DayOfWeek.MONDAY);
         ZonedDateTime atTime = forTime.atZone(ZoneId.of("UTC"));
