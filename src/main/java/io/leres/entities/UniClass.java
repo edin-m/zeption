@@ -2,10 +2,7 @@ package io.leres.entities;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -27,7 +24,7 @@ public class UniClass extends Resource {
     @ManyToOne
     private Teacher teacher;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Student> enrolledStudents = new HashSet<>();
 
     private Instant startDate = Instant.now();

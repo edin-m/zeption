@@ -74,4 +74,11 @@ class ClassServiceImpl implements ClassService {
     public void saveExisting(UniClass uniClass) {
         uniClassRepository.save(uniClass);
     }
+
+    @Override
+    public UniClass scheduleExam(UniClass uniClass, Instant dateStart, Instant dateEnd) {
+        uniClass.setStartDate(dateStart);
+        uniClass.setEndDate(dateEnd);
+        return uniClassRepository.save(uniClass);
+    }
 }

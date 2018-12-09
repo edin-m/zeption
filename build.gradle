@@ -58,6 +58,9 @@ dependencies {
     // assertj
     testCompile group: 'org.assertj', name: 'assertj-core', version: '3.11.1'
 
+    // slf4j
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+
     // scala
     implementation 'org.scala-lang:scala-library:2.11.12'
     testImplementation 'org.scalatest:scalatest_2.11:3.0.0'

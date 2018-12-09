@@ -1,6 +1,6 @@
 package io.leres.config;
 
-import io.leres.classes.ClassManager;
+import io.leres.classes.ClassCruder;
 import io.leres.classes.repo.UniClassRepository;
 import io.leres.entities.PersonData;
 import io.leres.entities.Student;
@@ -15,8 +15,6 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import javax.annotation.PostConstruct;
-
 @Component
 public class DbSeed {
 
@@ -24,7 +22,7 @@ public class DbSeed {
     private StudentCreator studentCreator;
 
     @Autowired
-    private ClassManager classManager;
+    private ClassCruder classCruder;
 
     @Autowired
     private UniClassRepository uniClassRepository;
@@ -33,7 +31,7 @@ public class DbSeed {
     @Qualifier("transactionManager")
     protected PlatformTransactionManager txManager;
 
-    @PostConstruct
+//    @PostConstruct
     public void runPostConstruct() {
         TransactionTemplate tmpl = new TransactionTemplate(txManager);
         tmpl.execute(new TransactionCallbackWithoutResult() {
@@ -57,8 +55,8 @@ public class DbSeed {
         studentCreator.createStudent(studentB);
         studentCreator.createStudent(studentC);
 
-        UniClass cs101 = classManager.createUniClass("CS-101", "Intro to Computer Science");
-        UniClass ca101 = classManager.createUniClass("CA-101", "Intro to Computer Architecture");
+        UniClass cs101 = classCruder.createUniClass("CS-101", "Intro to Computer Science");
+        UniClass ca101 = classCruder.createUniClass("CA-101", "Intro to Computer Architecture");
 
         uniClassRepository.save(cs101);
         uniClassRepository.save(ca101);

@@ -4,10 +4,11 @@ import lombok.*;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.Transient;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
+@Table(name = "students")
 @Data
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor

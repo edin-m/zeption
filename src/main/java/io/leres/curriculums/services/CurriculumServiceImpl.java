@@ -1,6 +1,6 @@
 package io.leres.curriculums.services;
 
-import io.leres.classes.ClassManager;
+import io.leres.classes.ClassCruder;
 import io.leres.curriculums.repo.CurriculumEntryRepository;
 import io.leres.entities.CurriculumEntry;
 import io.leres.entities.Teacher;
@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 class CurriculumServiceImpl implements CurriculumService {
 
     private CurriculumEntryRepository curriculumEntryRepository;
-    private ClassManager classManager;
+    private ClassCruder classCruder;
 
-    CurriculumServiceImpl(CurriculumEntryRepository curriculumEntryRepository, ClassManager classManager) {
+    CurriculumServiceImpl(CurriculumEntryRepository curriculumEntryRepository, ClassCruder classCruder) {
         this.curriculumEntryRepository = curriculumEntryRepository;
-        this.classManager = classManager;
+        this.classCruder = classCruder;
     }
 
     @Override
@@ -24,7 +24,7 @@ class CurriculumServiceImpl implements CurriculumService {
 
         uniClass.addEntry(entry);
 
-        classManager.saveExisting(uniClass);
+        classCruder.saveExisting(uniClass);
         curriculumEntryRepository.save(entry);
     }
 }

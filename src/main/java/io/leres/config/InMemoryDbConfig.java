@@ -2,7 +2,9 @@ package io.leres.config;
 
 import io.leres.classes.repo.UniClassRepository;
 import io.leres.curriculums.repo.CurriculumEntryRepository;
-import io.leres.entities.Student;
+import io.leres.example.posts.repo.CommentRepository;
+import io.leres.example.posts.repo.PostRepository;
+import io.leres.example.posts.repo.TagRepository;
 import io.leres.exams.repo.ExamRepository;
 import io.leres.exams.repo.ExamResultRepository;
 import io.leres.students.repo.StudentRepository;
@@ -20,8 +22,9 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import javax.sql.DataSource;
 
 @Configuration
-@EntityScan(basePackageClasses = {
-        Student.class
+@EntityScan(basePackages = {
+        "io.leres.entities",
+        "io.leres.example"
 })
 @EnableJpaRepositories(basePackageClasses = {
         StudentRepository.class,
@@ -29,7 +32,10 @@ import javax.sql.DataSource;
         CurriculumEntryRepository.class,
         TeacherRepository.class,
         ExamRepository.class,
-        ExamResultRepository.class
+        ExamResultRepository.class,
+        PostRepository.class,
+        CommentRepository.class,
+        TagRepository.class
 })
 public class InMemoryDbConfig {
 
@@ -45,6 +51,7 @@ public class InMemoryDbConfig {
         EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
         EmbeddedDatabase db = builder
                 .setType(EmbeddedDatabaseType.H2)
+                .setName("wicked")
                 .build();
 
         return db;

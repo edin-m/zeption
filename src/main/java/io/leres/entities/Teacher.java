@@ -21,5 +21,5 @@ public class Teacher extends Resource {
     @Embedded
     private PersonData personData;
 
-    TeacherType teacherType;
+    private TeacherType teacherType;
 }

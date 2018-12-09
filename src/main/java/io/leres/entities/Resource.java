@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Version;
 import java.time.Instant;
 
 @MappedSuperclass
@@ -24,5 +25,8 @@ public class Resource {
     public void setLastUpdatedToNow() {
         lastUpdated = Instant.now();
     }
+
+    @Version
+    private Long version;
 
 }

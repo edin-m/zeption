@@ -2,7 +2,7 @@ package io.leres.classes;
 
 import io.leres.entities.UniClass;
 
-public interface ClassManager {
+public interface ClassCruder {
 
     UniClass createUniClass(String name, String description);
 

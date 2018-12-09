@@ -7,11 +7,11 @@ import io.leres.curriculums.CurriculumPoster;
 import io.leres.entities.CurriculumEntry;
 import io.leres.entities.Teacher;
 import io.leres.entities.UniClass;
+import io.leres.exceptions.NotImplemented;
 import io.leres.teachers.TeacherFinder;
 import io.leres.teachers.exceptions.TeacherNotFound;
 import org.springframework.web.bind.annotation.*;
 
-import javax.naming.OperationNotSupportedException;
 import java.util.List;
 
 @RestController
@@ -34,8 +34,8 @@ public class CurriculumController {
         curriculumPoster.addTextMessageToCurriculum(teacher, uniClass, requestModel.getWeekOfCurriculum(), requestModel.getDescription());
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/curriculums")
-    public List<CurriculumEntry> getEntriesForUniClass(@RequestParam("uniClassId") long uniClassId) throws OperationNotSupportedException {
-        throw new OperationNotSupportedException();
+    @RequestMapping(method = RequestMethod.GET, path = "/curriculums/{uniClassId}")
+    public List<CurriculumEntry> getEntriesForUniClass(@PathVariable("uniClassId") long uniClassId) throws NotImplemented {
+        throw new NotImplemented("GET: /curriculums/{uniClassId}");
     }
 }
