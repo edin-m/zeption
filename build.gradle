@@ -61,10 +61,19 @@ dependencies {
     // slf4j
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
 
+    // junit
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.1.RELEASE'
+
+    // cocumber
+    testCompile group: 'info.cukes', name: 'cucumber-spring', version: '1.2.5'
+    testCompile group: 'info.cukes', name: 'cucumber-java', version: '1.2.5'
+    testCompile group: 'info.cukes', name: 'cucumber-junit', version: '1.2.5'
+
     // scala
     implementation 'org.scala-lang:scala-library:2.11.12'
     testImplementation 'org.scalatest:scalatest_2.11:3.0.0'
-    testImplementation 'junit:junit:4.12'
+
 }
 
 task unitTests(type: Test) {

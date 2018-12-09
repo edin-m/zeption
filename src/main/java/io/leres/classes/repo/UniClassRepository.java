@@ -4,5 +4,6 @@ import io.leres.entities.UniClass;
 import org.springframework.data.repository.CrudRepository;
 
 public interface UniClassRepository extends CrudRepository<UniClass, Long> {
-    
+
+    UniClass findByName(String name);
 }

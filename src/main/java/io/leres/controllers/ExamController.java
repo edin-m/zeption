@@ -1,18 +1,16 @@
 package io.leres.controllers;
 
 import io.leres.classes.ClassFinder;
-import io.leres.classes.exceptions.UniClassNotFound;
-import io.leres.controllers.model.ExamRequestModel;
 import io.leres.entities.Exam;
 import io.leres.entities.ExamResult;
-import io.leres.entities.Teacher;
-import io.leres.entities.UniClass;
 import io.leres.exams.ExamFinder;
 import io.leres.exams.ExamScheduler;
 import io.leres.exams.exceptions.ExamNotFound;
 import io.leres.teachers.TeacherFinder;
-import io.leres.teachers.exceptions.TeacherNotFound;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,12 +30,12 @@ public class ExamController {
         this.examFinder = examFinder;
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/exams")
-    public Exam createNewExam(@RequestBody ExamRequestModel examRequestModel) throws TeacherNotFound, UniClassNotFound {
-        Teacher teacher = teacherFinder.getTeacherById(examRequestModel.getTeacherId());
-        UniClass uniClass = classFinder.getUniClassForId(examRequestModel.getUniClassId());
-        return examScheduler.scheduleExam(teacher, examRequestModel.getTimeAt(), uniClass);
-    }
+//    @RequestMapping(method = RequestMethod.POST, path = "/exams")
+//    public Exam createNewExam(@RequestBody ExamRequestModel examRequestModel) throws TeacherNotFound, UniClassNotFound {
+//        Teacher teacher = teacherFinder.getTeacherById(examRequestModel.getTeacherId());
+//        UniClass uniClass = classFinder.getUniClassForId(examRequestModel.getUniClassId());
+//        return examScheduler.scheduleExam(teacher, examRequestModel.getTimeAt(), uniClass);
+//    }
 
     @RequestMapping(method = RequestMethod.GET, path = "/exams/{examId}")
     public Exam getExam(@PathVariable("examId") long examId) throws ExamNotFound {

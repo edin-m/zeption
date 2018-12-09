@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class StudentAlreadyEnrolled extends Exception {
     public StudentAlreadyEnrolled(Student student, UniClass uniClass) {
         super(String.format("Student already enrolled (%s, %s) (%s, %s)",
-                student.getId(), student.getFullName(),
+                student.getId(), "",
                 uniClass.getId(), uniClass.getName()));
     }
 }

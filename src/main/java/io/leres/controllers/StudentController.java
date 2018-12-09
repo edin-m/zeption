@@ -1,52 +1,68 @@
 package io.leres.controllers;
 
-import io.leres.controllers.exceptions.StudentIdMismatch;
+import io.leres.entities.Person;
 import io.leres.entities.Student;
-import io.leres.students.StudentCreator;
-import io.leres.students.StudentRetriever;
-import io.leres.students.StudentUpdater;
-import io.leres.students.exceptions.StudentAlreadyExists;
-import io.leres.students.exceptions.StudentNotFound;
+import io.leres.exceptions.ResourceAlreadyExists;
+import io.leres.exceptions.ResourceNotFound;
+import io.leres.students.StudentCuder;
+import io.leres.students.StudentFinder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 public class StudentController {
 
-    private StudentRetriever studentRetriever;
-    private StudentUpdater studentUpdater;
-    private StudentCreator studentCreator;
+    private StudentFinder studentFinder;
+    private StudentCuder studentCuder;
 
-    public StudentController(StudentRetriever studentRetriever, StudentUpdater studentUpdater,
-                             StudentCreator studentCreator) {
-        this.studentRetriever = studentRetriever;
-        this.studentUpdater = studentUpdater;
-        this.studentCreator = studentCreator;
+    public StudentController(StudentFinder studentFinder, StudentCuder studentCuder) {
+        this.studentFinder = studentFinder;
+        this.studentCuder = studentCuder;
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/students")
-    public List<Student> getStudents() {
-        return studentRetriever.getAllStudents();
+    @PostMapping("/students")
+    public Student createStudent(@RequestBody Person person) throws ResourceAlreadyExists {
+        return studentCuder.createStudent(person);
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/students/{id}")
-    public Student getStudentById(@PathVariable("id") Long id) throws StudentNotFound {
-        return studentRetriever.getStudentById(id);
+    @PutMapping("/students/{studentId}/person")
+    public Student updateStudentPersonData(@PathVariable Long studentId, @RequestBody Person person) throws ResourceNotFound {
+        return studentCuder.updateStudentPerson(studentId, person);
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/students")
-    public Student createStudent(@RequestBody Student student) throws StudentAlreadyExists {
-        return studentCreator.createStudent(student);
+    @GetMapping("/students/{studentId}")
+    public Student getStudent(@PathVariable("studentId") Long studentId) throws ResourceNotFound {
+        return studentFinder.getStudentById(studentId);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, path = "/students/{id}")
-    public Student updateStudent(@RequestBody Student student, @PathVariable("id") long studentId)
-            throws StudentNotFound, StudentIdMismatch {
-        if (studentId != student.getId()) {
-            throw new StudentIdMismatch(student, studentId);
-        }
-        return studentUpdater.updateStudent(student);
+    @DeleteMapping("/students/{studentId}")
+    public ResponseEntity<?> deleteStudent(@PathVariable("studentId") Long studentId) throws ResourceNotFound {
+        studentCuder.removeStudent(studentId);
+        return ResponseEntity.ok().build();
     }
+
+//    @RequestMapping(method = RequestMethod.GET, path = "/students")
+//    public List<Student> getStudents() {
+//        return studentRetriever.getAllStudents();
+//    }
+//
+//    @RequestMapping(method = RequestMethod.GET, path = "/students/{id}")
+//    public Student getStudentById(@PathVariable("id") Long id) throws StudentNotFound {
+//        return studentRetriever.getStudentById(id);
+//    }
+//
+//    @RequestMapping(method = RequestMethod.POST, path = "/students")
+//    public Student createStudent(@RequestBody Student student) throws StudentAlreadyExists {
+//        return studentCreator.createStudent(student);
+//    }
+//
+//    @RequestMapping(method = RequestMethod.PUT, path = "/students/{id}")
+//    public Student updateStudent(@RequestBody Student student, @PathVariable("id") long studentId)
+//            throws StudentNotFound, StudentIdMismatch {
+//        if (studentId != student.getId()) {
+//            throw new StudentIdMismatch(student, studentId);
+//        }
+//        return studentUpdater.updateStudent(student);
+//    }
 
 }

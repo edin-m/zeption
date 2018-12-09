@@ -67,9 +67,9 @@ class ExamServiceImpl implements ExamService {
 
         exam = examRepository.save(exam);
 
-        int weekOfClass = classFinder.findWeekOfClass(uniClass, timeAt);
-        String description = String.format("Exam scheduled for week %s", weekOfClass);
-        curriculumPoster.addTextMessageToCurriculum(signOffTeacher, uniClass, weekOfClass, description);
+//        int weekOfClass = classFinder.findWeekOfClass(uniClass, timeAt);
+//        String description = String.format("Exam scheduled for week %s", weekOfClass);
+//        curriculumPoster.addTextMessageToCurriculum(signOffTeacher, uniClass, weekOfClass, description);
 
         return exam;
     }

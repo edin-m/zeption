@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.CONFLICT)
 public class StudentAlreadyExists extends Exception {
-    public StudentAlreadyExists() {
-        super("The student under the same name already exists");
+    public StudentAlreadyExists(String studentName) {
+        super(String.format("The student under the same name (%s) already exists", studentName));
     }
 }

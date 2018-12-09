@@ -1,5 +1,6 @@
 package io.leres.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -13,9 +14,11 @@ import javax.persistence.ManyToOne;
 @ToString(callSuper = true)
 public class CurriculumEntry extends Resource {
 
+    @JsonIgnore
     @ManyToOne
     private UniClass uniClass;
 
+    @JsonIgnore
     @ManyToOne
     private Teacher author;
 

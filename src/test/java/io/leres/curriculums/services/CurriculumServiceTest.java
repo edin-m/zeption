@@ -1,12 +1,13 @@
 package io.leres.curriculums.services;
 
 import io.leres.UnitTests;
-import io.leres.classes.ClassCruder;
+import io.leres.classes.UniClassCuder;
 import io.leres.classes.UniClassFixture;
 import io.leres.curriculums.repo.CurriculumEntryRepository;
 import io.leres.entities.CurriculumEntry;
 import io.leres.entities.Teacher;
 import io.leres.entities.UniClass;
+import io.leres.exceptions.ResourceAlreadyExists;
 import io.leres.teachers.TeacherFixture;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,22 +21,22 @@ import static org.mockito.Mockito.*;
 public class CurriculumServiceTest {
 
     private CurriculumEntryRepository curriculumEntryRepositoryMock;
-    private ClassCruder classCruderMock;
+    private UniClassCuder classCruderMock;
 
     private CurriculumService curriculumService;
 
     @Before
-    public void setUp() {
+    public void setUp() throws ResourceAlreadyExists {
         curriculumEntryRepositoryMock = mock(CurriculumEntryRepository.class);
-        classCruderMock = mock(ClassCruder.class);
+        classCruderMock = mock(UniClassCuder.class);
 
-        curriculumService = new CurriculumServiceImpl(curriculumEntryRepositoryMock, classCruderMock);
+        curriculumService = new CurriculumServiceImpl(curriculumEntryRepositoryMock);
 
         setUpMocks();
     }
 
-    private void setUpMocks() {
-        doNothing().when(classCruderMock).saveExisting(any(UniClass.class));
+    private void setUpMocks() throws ResourceAlreadyExists {
+        doNothing().when(classCruderMock).createUniClass(any(UniClass.class));
 
         when(curriculumEntryRepositoryMock.save(
                 any(CurriculumEntry.class)
@@ -43,13 +44,13 @@ public class CurriculumServiceTest {
     }
 
     @Test
-    public void testAddingTextMessageToCurriculum() {
+    public void testAddingTextMessageToCurriculum() throws ResourceAlreadyExists {
         Teacher teacher = TeacherFixture.getDefaultProfessor();
         UniClass uniClass = UniClassFixture.getDefaultClass();
 
-        curriculumService.addTextMessageToCurriculum(teacher, uniClass, 1, "Intro Lecture");
+//        curriculumService.addTextMessageToCurriculum(teacher, uniClass, 1, "Intro Lecture");
 
-        verify(classCruderMock).saveExisting(any(UniClass.class));
+        verify(classCruderMock).createUniClass(any(UniClass.class));
         verify(curriculumEntryRepositoryMock).save(any(CurriculumEntry.class));
     }
 

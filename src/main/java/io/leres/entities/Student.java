@@ -2,24 +2,25 @@ package io.leres.entities;
 
 import lombok.*;
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "students")
 @Data
 @EqualsAndHashCode(callSuper = true)
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class Student extends Resource implements Serializable {
 
-    @Embedded
-    private PersonData personData;
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "person_info_id")
+    private Person person;
 
-    public String getFullName() {
-        return personData.getFirstName() + " " + personData.getLastName();
-    }
+
+
+//    @Embedded
+//    private PersonData personData;
+//
+//    public String getFullName() {
+//        return personData.getFirstName() + " " + personData.getLastName();
+//    }
 }
