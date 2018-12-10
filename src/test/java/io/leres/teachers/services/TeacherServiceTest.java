@@ -2,7 +2,6 @@ package io.leres.teachers.services;
 
 import io.leres.UnitTests;
 import io.leres.entities.Teacher;
-import io.leres.teachers.TeacherFixture;
 import io.leres.teachers.exceptions.TeacherNotFound;
 import io.leres.teachers.repo.TeacherRepository;
 import org.junit.Before;
@@ -13,9 +12,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @Category(UnitTests.class)
 public class TeacherServiceTest {
@@ -32,7 +29,7 @@ public class TeacherServiceTest {
 
         teacherService = new TeacherServiceImpl(teacherRepositoryMock);
 
-        exampleTeacher = TeacherFixture.getDefaultProfessor();
+//        exampleTeacher = TeacherFixture.getDefaultProfessor();
     }
 
     @Test(expected = TeacherNotFound.class)

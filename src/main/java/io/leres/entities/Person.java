@@ -38,4 +38,11 @@ public class Person extends Resource {
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
+    public Person(String socialId, String firstName, String middleName, String lastName) {
+        this.socialId = socialId;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+    }
 }
