@@ -35,8 +35,6 @@ public class StudentControllerStepDefs {
 
     private ObjectMapper mapper = new CustomObjectMapper();
 
-    private Student student;
-
     @Autowired
     private StudentRepository studentRepository;
 
@@ -60,28 +58,24 @@ public class StudentControllerStepDefs {
         ObjectMapper mapper = new CustomObjectMapper();
         String body = mapper.writeValueAsString(person);
 
-        String result = mvc.perform(post("/students")
+        mvc.perform(post("/students")
                 .content(body)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
-
-        student = mapper.readValue(result, Student.class);
     }
 
-    @When("update the student")
-    public void updateTheStudent() throws Exception {
+    @When("update the student (\\d+)")
+    public void updateTheStudent(long studentId) throws Exception {
         Person person = new Person();
         person.setFirstName("first name modified");
         person.setLastName("last name");
 
-        String result = mvc.perform(put(String.format("/students/%s/person", student.getId()))
+        mvc.perform(put(String.format("/students/%s/person", studentId))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(person)))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
-
-        student = mapper.readValue(result, Student.class);
     }
 
     @Then("verify student id (\\d+) first name is (.+)$")

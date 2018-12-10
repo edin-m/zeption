@@ -11,7 +11,7 @@ Feature: Example managing students
         Given the web context
         And empty database
         And create a student
-        When update the student
+        When update the student 2
         Then verify student id 2 first name is first name modified
         Then verify student id 2 last name is last name
 

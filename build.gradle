@@ -80,6 +80,7 @@ task unitTests(type: Test) {
     useJUnit {
         includeCategories 'io.leres.UnitTests'
         excludeCategories 'io.leres.IntegrationTests'
+        excludeCategories 'io.leres.AcceptanceTests'
     }
 }
 
@@ -87,5 +88,14 @@ task integrationTests(type: Test) {
     useJUnit {
         excludeCategories 'io.leres.UnitTests'
         includeCategories 'io.leres.IntegrationTests'
+        excludeCategories 'io.leres.AcceptanceTests'
+    }
+}
+
+task acceptanceTests(type: Test) {
+    useJUnit {
+        excludeCategories 'io.leres.UnitTests'
+        excludeCategories 'io.leres.IntegrationTests'
+        includeCategories 'io.leres.AcceptanceTests'
     }
 }
