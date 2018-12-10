@@ -1,6 +1,7 @@
 package io.leres.config;
 
 import io.leres.classes.repo.UniClassRepository;
+import io.leres.courses.repo.CourseRepository;
 import io.leres.curriculums.repo.CurriculumEntryRepository;
 import io.leres.example.posts.repo.CommentRepository;
 import io.leres.example.posts.repo.PostRepository;
@@ -35,7 +36,8 @@ import javax.sql.DataSource;
         ExamResultRepository.class,
         PostRepository.class,
         CommentRepository.class,
-        TagRepository.class
+        TagRepository.class,
+        CourseRepository.class
 })
 public class InMemoryDbConfig {
 

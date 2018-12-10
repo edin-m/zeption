@@ -5,13 +5,14 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.Instant;
 
 @MappedSuperclass
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = { "lastUpdated" })
-public class Resource {
+public class Resource implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

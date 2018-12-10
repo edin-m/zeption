@@ -12,7 +12,7 @@ class StudentServiceImpl implements StudentService {
 
     private StudentRepository studentRepository;
 
-    public StudentServiceImpl(StudentRepository studentRepository) {
+    StudentServiceImpl(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
 
@@ -61,47 +61,4 @@ class StudentServiceImpl implements StudentService {
     public Student getStudentById(long studentId) throws ResourceNotFound {
         return studentRepository.findById(studentId).orElseThrow(() -> new ResourceNotFound(Student.class, studentId));
     }
-//
-//    private StudentRepository studentRepository;
-//
-//    StudentServiceImpl(StudentRepository studentRepository) {
-//        this.studentRepository = studentRepository;
-//    }
-//
-//    @Override
-//    public Student createStudent(Student student) throws StudentAlreadyExists {
-//        Student found = studentRepository.findByPersonData_SocialId(student.getPersonData().getSocialId());
-//
-//        if (found != null) {
-//            throw new StudentAlreadyExists();
-//        }
-//
-//        return studentRepository.save(student);
-//    }
-//
-//    @Override
-//    public List<Student> getAllStudents() {
-//        Iterable<Student> students = studentRepository.findAll();
-//        return ListUtils.iterableToList(students);
-//    }
-//
-//    @Override
-//    public Student getStudentById(Long id) throws StudentNotFound {
-//        Optional<Student> student = studentRepository.findById(id);
-//
-//        if (!student.isPresent()) {
-//            throw new StudentNotFound(String.format("Student under id: %s not found", id));
-//        }
-//
-//        return student.get();
-//    }
-//
-//    @Override
-//    public Student updateStudent(Student student) throws StudentNotFound {
-//        Student found = getStudentById(student.getId());
-//
-//        found.setPersonData(student.getPersonData());
-//
-//        return studentRepository.save(found);
-//    }
 }
