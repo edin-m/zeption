@@ -1,9 +1,12 @@
 package io.leres.controllers;
 
 import io.leres.entities.Person;
-import io.leres.exceptions.NotImplemented;
+import io.leres.exceptions.ResourceAlreadyExists;
+import io.leres.exceptions.ResourceNotFound;
+import io.leres.teachers.Teacher;
 import io.leres.teachers.TeacherCuder;
 import io.leres.teachers.TeacherFinder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,12 +21,18 @@ public class TeacherController {
     }
 
     @PostMapping("/teachers")
-    public void createTeacher(@RequestBody Person person) {
-        throw new NotImplemented();
+    public Teacher createTeacher(@RequestBody Person person) throws ResourceAlreadyExists {
+        return teacherCuder.createTeacher(person);
+    }
+
+    @GetMapping("/teachers/{teacherId}")
+    public Teacher getTeacher(@PathVariable Long teacherId) throws ResourceNotFound {
+        return teacherFinder.getTeacherById(teacherId);
     }
 
     @DeleteMapping("/teachers/{teacherId}")
-    public void deleteTeacher(@PathVariable Long teacherId) {
-        throw new NotImplemented();
+    public ResponseEntity<?> deleteTeacher(@PathVariable Long teacherId) throws ResourceNotFound {
+        teacherCuder.removeTeacher(teacherId);
+        return ResponseEntity.ok().build();
     }
 }

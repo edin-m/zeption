@@ -2,13 +2,14 @@ package io.leres.courses.services;
 
 import io.leres.courses.Course;
 import io.leres.courses.CoursePost;
-import io.leres.courses.exceptions.StudentAlreadyAssignedToCourse;
-import io.leres.courses.exceptions.StudentNotAssignedToCourse;
+import io.leres.courses.exceptions.AlreadyAssignedToCourse;
+import io.leres.courses.exceptions.NotAssignedToCourse;
 import io.leres.courses.repo.CoursePostRepository;
 import io.leres.courses.repo.CourseRepository;
-import io.leres.students.Student;
 import io.leres.exceptions.ResourceAlreadyExists;
 import io.leres.exceptions.ResourceNotFound;
+import io.leres.students.Student;
+import io.leres.teachers.Teacher;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -68,9 +69,9 @@ class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void assignStudentToCourse(Course course, Student student) throws StudentAlreadyAssignedToCourse {
+    public void assignStudentToCourse(Course course, Student student) throws AlreadyAssignedToCourse {
         if (course.getStudents().contains(student)) {
-            throw new StudentAlreadyAssignedToCourse(student.getId());
+            throw new AlreadyAssignedToCourse(Student.class, student.getId());
         }
 
         course.getStudents().add(student);
@@ -78,12 +79,32 @@ class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void removeStudentFromCourse(Course course, Student student) throws StudentNotAssignedToCourse {
+    public void removeStudentFromCourse(Course course, Student student) throws NotAssignedToCourse {
         if (!course.getStudents().contains(student)) {
-            throw new StudentNotAssignedToCourse(student.getId());
+            throw new NotAssignedToCourse(Student.class, student.getId());
         }
 
         course.getStudents().remove(student);
+        courseRepository.save(course);
+    }
+
+    @Override
+    public void assignTeacherToCourse(Course course, Teacher teacher) throws AlreadyAssignedToCourse {
+        if (course.getTeachers().contains(teacher)) {
+            throw new AlreadyAssignedToCourse(Teacher.class, teacher.getId());
+        }
+
+        course.getTeachers().add(teacher);
+        courseRepository.save(course);
+    }
+
+    @Override
+    public void removeTeacherFromCourse(Course course, Teacher teacher) throws NotAssignedToCourse {
+        if (!course.getTeachers().contains(teacher)) {
+            throw new NotAssignedToCourse(Teacher.class, teacher.getId());
+        }
+
+        course.getTeachers().remove(teacher);
         courseRepository.save(course);
     }
 }

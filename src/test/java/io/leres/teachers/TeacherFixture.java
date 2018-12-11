@@ -1,13 +1,13 @@
 package io.leres.teachers;
 
+import io.leres.entities.Person;
+
 public abstract class TeacherFixture {
 
-//    public static Teacher getDefaultProfessor() {
-//        Teacher teacher = new Teacher(
-//                new Person("0123", "first", "middle", "last"),
-//                Teacher.TeacherType.PROFESSOR
-//        );
-//        teacher.setId(1L);
-//        return teacher;
-//    }
+    public static Teacher getExampleTeacher() {
+        Teacher teacher = new Teacher();
+        teacher.setPerson(new Person("0123", "fist", "middle", "last"));
+        teacher.setId(1L);
+        return teacher;
+    }
 }

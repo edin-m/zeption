@@ -3,6 +3,7 @@ package io.leres.courses;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.leres.entities.Resource;
 import io.leres.students.Student;
+import io.leres.teachers.Teacher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,8 @@ public class Course extends Resource {
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id"))
     private Set<Student> students = new HashSet<>();
+
+    private Set<Teacher> teachers = new HashSet<>();
 
     public Course(String name) {
         this.name = name;

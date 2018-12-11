@@ -4,14 +4,16 @@ import io.leres.UnitTests;
 import io.leres.courses.Course;
 import io.leres.courses.CourseFixture;
 import io.leres.courses.CoursePost;
-import io.leres.courses.exceptions.StudentAlreadyAssignedToCourse;
-import io.leres.courses.exceptions.StudentNotAssignedToCourse;
+import io.leres.courses.exceptions.AlreadyAssignedToCourse;
+import io.leres.courses.exceptions.NotAssignedToCourse;
 import io.leres.courses.repo.CoursePostRepository;
 import io.leres.courses.repo.CourseRepository;
-import io.leres.students.Student;
 import io.leres.exceptions.ResourceAlreadyExists;
 import io.leres.exceptions.ResourceNotFound;
+import io.leres.students.Student;
 import io.leres.students.StudentFixture;
+import io.leres.teachers.Teacher;
+import io.leres.teachers.TeacherFixture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -146,8 +148,8 @@ public class CourseServiceTest {
         verify(coursePostRepository).deleteById(1L);
     }
 
-    @Test(expected = StudentAlreadyAssignedToCourse.class)
-    public void testAssigningStudentToCourseWhenAlreadyAssigned() throws StudentAlreadyAssignedToCourse {
+    @Test(expected = AlreadyAssignedToCourse.class)
+    public void testAssigningStudentToCourseWhenAlreadyAssigned() throws AlreadyAssignedToCourse {
         Course course = CourseFixture.getExampleCourse();
         Student student = StudentFixture.getExampleStudent();
         student.setId(1L);
@@ -157,7 +159,7 @@ public class CourseServiceTest {
     }
 
     @Test
-    public void testAssigningStudentToCourseSaves() throws StudentAlreadyAssignedToCourse {
+    public void testAssigningStudentToCourseSaves() throws AlreadyAssignedToCourse {
         Course course = CourseFixture.getExampleCourse();
         Student student = StudentFixture.getExampleStudent();
         student.setId(1L);
@@ -168,8 +170,8 @@ public class CourseServiceTest {
         verify(courseRepositoryMock).save(course);
     }
 
-    @Test(expected = StudentNotAssignedToCourse.class)
-    public void testRemovingNonAssignedStudentFromCourseThrows() throws StudentNotAssignedToCourse {
+    @Test(expected = NotAssignedToCourse.class)
+    public void testRemovingNonAssignedStudentFromCourseThrows() throws NotAssignedToCourse {
         Student student = StudentFixture.getExampleStudent();
         Course course = CourseFixture.getExampleCourse();
 
@@ -177,7 +179,7 @@ public class CourseServiceTest {
     }
 
     @Test
-    public void testRemovingAssignedStudentFromCourseSaves() throws StudentNotAssignedToCourse {
+    public void testRemovingAssignedStudentFromCourseSaves() throws NotAssignedToCourse {
         Student student = StudentFixture.getExampleStudent();
         Course course = CourseFixture.getExampleCourse();
         course.getStudents().add(student);
@@ -185,6 +187,46 @@ public class CourseServiceTest {
         courseService.removeStudentFromCourse(course, student);
 
         assertThat(course.getStudents()).hasSize(0);
+        verify(courseRepositoryMock).save(course);
+    }
+
+    @Test(expected = AlreadyAssignedToCourse.class)
+    public void testAssigningAlreadyAssignedTeacherToCourseThrows() throws AlreadyAssignedToCourse {
+        Course course = CourseFixture.getExampleCourse();
+        Teacher teacher = TeacherFixture.getExampleTeacher();
+        course.getTeachers().add(teacher);
+
+        courseService.assignTeacherToCourse(course, teacher);
+    }
+
+    @Test
+    public void testAssigningTeacherToCourseSaves() throws AlreadyAssignedToCourse {
+        Course course = CourseFixture.getExampleCourse();
+        Teacher teacher = TeacherFixture.getExampleTeacher();
+
+        courseService.assignTeacherToCourse(course, teacher);
+
+        assertThat(course.getTeachers()).hasSize(1);
+        verify(courseRepositoryMock).save(course);
+    }
+
+    @Test(expected = NotAssignedToCourse.class)
+    public void testRemovingNonAssignedTeacherFromCourseThrows() throws NotAssignedToCourse {
+        Course course = CourseFixture.getExampleCourse();
+        Teacher teacher = TeacherFixture.getExampleTeacher();
+
+        courseService.removeTeacherFromCourse(course, teacher);
+    }
+
+    @Test
+    public void testRemovingAssignedTeacherFromCourseSaves() throws NotAssignedToCourse {
+        Course course = CourseFixture.getExampleCourse();
+        Teacher teacher = TeacherFixture.getExampleTeacher();
+        course.getTeachers().add(teacher);
+
+        courseService.removeTeacherFromCourse(course, teacher);
+
+        assertThat(course.getTeachers()).hasSize(0);
         verify(courseRepositoryMock).save(course);
     }
 }
