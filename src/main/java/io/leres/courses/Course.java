@@ -33,6 +33,12 @@ public class Course extends Resource {
             inverseJoinColumns = @JoinColumn(name = "student_id"))
     private Set<Student> students = new HashSet<>();
 
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinTable(name = "course_teachers",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "teacher_id"))
     private Set<Teacher> teachers = new HashSet<>();
 
     public Course(String name) {

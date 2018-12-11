@@ -3,12 +3,13 @@ package io.leres.controllers;
 import io.leres.courses.*;
 import io.leres.courses.exceptions.AlreadyAssignedToCourse;
 import io.leres.courses.exceptions.NotAssignedToCourse;
-import io.leres.exceptions.NotImplemented;
 import io.leres.exceptions.ResourceAlreadyExists;
 import io.leres.exceptions.ResourceNotFound;
 import io.leres.students.Student;
 import io.leres.students.StudentFinder;
 import io.leres.teachers.Teacher;
+import io.leres.teachers.TeacherFinder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,18 +17,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@Slf4j
 public class CourseController {
 
     private CourseFinder courseFinder;
     private CourseCuder courseCuder;
     private StudentFinder studentFinder;
     private CourseAssigner courseAssigner;
+    private TeacherFinder teacherFinder;
 
-    public CourseController(CourseFinder courseFinder, CourseCuder courseCuder, StudentFinder studentFinder, CourseAssigner courseAssigner) {
+    public CourseController(CourseFinder courseFinder, CourseCuder courseCuder, StudentFinder studentFinder, CourseAssigner courseAssigner, TeacherFinder teacherFinder) {
         this.courseFinder = courseFinder;
         this.courseCuder = courseCuder;
         this.studentFinder = studentFinder;
         this.courseAssigner = courseAssigner;
+        this.teacherFinder = teacherFinder;
     }
 
     @PostMapping("/courses")
@@ -75,13 +79,19 @@ public class CourseController {
     }
 
     @PostMapping("/courses/{courseId}/teachers/{teacherId}")
-    public ResponseEntity<?> assignTeacherToCourse(@PathVariable Long courseId, @PathVariable Long teacherId) {
-        throw new NotImplemented();
+    public ResponseEntity<?> assignTeacherToCourse(@PathVariable Long courseId, @PathVariable Long teacherId) throws ResourceNotFound, AlreadyAssignedToCourse {
+        Course course = courseFinder.getCourseById(courseId);
+        Teacher teacher = teacherFinder.getTeacherById(teacherId);
+        courseAssigner.assignTeacherToCourse(course, teacher);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/courses/{courseId}/teachers/{teacherId}")
-    public ResponseEntity<?> removeTeacherFromCourse(@PathVariable Long courseId, @PathVariable Long teacherId) {
-        throw new NotImplemented();
+    public ResponseEntity<?> removeTeacherFromCourse(@PathVariable Long courseId, @PathVariable Long teacherId) throws ResourceNotFound, NotAssignedToCourse {
+        Course course = courseFinder.getCourseById(courseId);
+        Teacher teacher = teacherFinder.getTeacherById(teacherId);
+        courseAssigner.removeTeacherFromCourse(course, teacher);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/courses/{courseId}/teachers")

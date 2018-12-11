@@ -10,7 +10,11 @@ import io.leres.courses.repo.CourseRepository;
 import io.leres.students.Student;
 import io.leres.students.StudentFixture;
 import io.leres.students.repo.StudentRepository;
+import io.leres.teachers.Teacher;
+import io.leres.teachers.TeacherFixture;
+import io.leres.teachers.repo.TeacherRepository;
 import io.leres.util.CustomObjectMapper;
+import io.leres.util.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,8 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Category(IntegrationTests.class)
@@ -49,6 +52,9 @@ public class CourseControllerIT {
     private CoursePostRepository coursePostRepository;
 
     @Autowired
+    private TeacherRepository teacherRepository;
+
+    @Autowired
     private StudentRepository studentRepository;
 
     ObjectMapper mapper = new CustomObjectMapper();
@@ -60,6 +66,7 @@ public class CourseControllerIT {
     public void setUp() {
         courseRepository.deleteAllInBatch();
         coursePostRepository.deleteAllInBatch();
+        teacherRepository.deleteAllInBatch();
     }
 
     @Test
@@ -130,16 +137,6 @@ public class CourseControllerIT {
         verifyStudentIsAssignedToCourse();
     }
 
-    private void setUpSingleCourseInRepository() {
-        Course course = courseRepository.save(CourseFixture.getExampleCourse());
-        courseId = course.getId();
-    }
-
-    private void setUpSingleStudentInRepository() {
-        Student student = studentRepository.save(StudentFixture.getExampleStudent());
-        studentId = student.getId();
-    }
-
     private void verifyStudentIsAssignedToCourse() {
         Student student = studentRepository.getOne(studentId);
         Course course = courseRepository.getOne(courseId);
@@ -205,6 +202,147 @@ public class CourseControllerIT {
         setUpSingleCourseInRepository();
 
         mvc.perform(delete(String.format("/courses/%s/students/%s", courseId, studentId)))
+                .andExpect(status().is(409));
+    }
+
+    private void setUpSingleStudentInRepository() {
+        Student student = studentRepository.save(StudentFixture.getExampleStudent());
+        studentId = student.getId();
+    }
+
+    private void setUpSingleCourseInRepository() {
+        Course course = courseRepository.save(CourseFixture.getExampleCourse());
+        courseId = course.getId();
+    }
+
+    @Test
+    public void testGettingStudentsFromNonExistingCourse() throws Exception {
+        mvc.perform(get(String.format("/courses/%s/students", 1000L)))
+                .andExpect(status().is(404));
+    }
+
+    @Test
+    @Transactional
+    public void testGettingStudentsForCourse() throws Exception {
+        Student student = studentRepository.save(StudentFixture.getExampleStudent());
+        Course course = CourseFixture.getExampleCourse();
+        course.getStudents().add(student);
+        course = courseRepository.save(course);
+
+        String result = mvc.perform(get(String.format("/courses/%s/students", course.getId())))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        List<Student> students = JsonUtils.<Student>fromJsonArray(result);
+        assertThat(students).hasSize(1);
+    }
+
+    @Test
+    public void testGettingTeachersFromNonExistingCourse() throws Exception {
+        mvc.perform(get(String.format("/courses/%s/teachers", 1000L)))
+                .andExpect(status().is(404));
+
+    }
+
+    @Test
+    @Transactional
+    public void testGettingTeachersForCourse() throws Exception {
+        Teacher teacher = teacherRepository.save(TeacherFixture.getExampleTeacher());
+        Course course = CourseFixture.getExampleCourse();
+        course.getTeachers().add(teacher);
+        course = courseRepository.save(course);
+
+        String result = mvc.perform(get(String.format("/courses/%s/teachers", course.getId())))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        List<Teacher> teachers = JsonUtils.<Teacher>fromJsonArray(result);
+        assertThat(teachers).hasSize(1);
+    }
+
+    @Test
+    public void testAssigningNonExistingTeacherToCourse() throws Exception {
+        Course course = courseRepository.save(CourseFixture.getExampleCourse());
+
+        mvc.perform(post(String.format("/courses/%s/teachers/1000", course.getId())))
+                .andExpect(status().is(404))
+                .andReturn().getResponse();
+    }
+
+    @Test
+    public void testAssigningTeacherToNonExistingCourse() throws Exception {
+        Teacher teacher = teacherRepository.save(TeacherFixture.getExampleTeacher());
+
+        mvc.perform(post(String.format("/courses/1000/teachers/%s", teacher.getId())))
+                .andExpect(status().is(404))
+                .andReturn().getResponse();
+    }
+
+    @Test
+    @Transactional
+    public void testAssigningAlreadyAssignedTeacherToCourse() throws Exception {
+        Teacher teacher = teacherRepository.save(TeacherFixture.getExampleTeacher());
+        Course course = CourseFixture.getExampleCourse();
+        course.getTeachers().add(teacher);
+        course = courseRepository.save(course);
+
+        mvc.perform(post(String.format("/courses/%s/teachers/%s",
+                course.getId(), teacher.getId())))
+                .andExpect(status().is(409));
+    }
+
+    @Test
+    @Transactional
+    public void testAssigningTeacherToCourse() throws Exception {
+        Course course = courseRepository.save(CourseFixture.getExampleCourse());
+        Teacher teacher = teacherRepository.save(TeacherFixture.getExampleTeacher());
+
+        mvc.perform(post(String.format("/courses/%s/teachers/%s",
+                course.getId(), teacher.getId())))
+                .andExpect(status().isOk());
+
+        course = courseRepository.getOne(course.getId());
+        assertThat(new ArrayList<>(course.getTeachers()).get(0)).isEqualTo(teacher);
+    }
+
+    @Test
+    public void testRemovingNonExistingTeacherFromCourse() throws Exception {
+        Course course = courseRepository.save(CourseFixture.getExampleCourse());
+
+        mvc.perform(delete(String.format("/courses/%s/teachers/1000", course.getId())))
+                .andExpect(status().is(404))
+                .andReturn().getResponse();
+    }
+
+    @Test
+    public void testRemovingTeacherFromNonExistingCourse() throws Exception {
+        Teacher teacher = teacherRepository.save(TeacherFixture.getExampleTeacher());
+
+        mvc.perform(delete(String.format("/courses/1000/teachers/%s", teacher.getId())))
+                .andExpect(status().is(404))
+                .andReturn().getResponse();
+    }
+
+    @Test
+    @Transactional
+    public void testRemovingTeacherFromCourse() throws Exception {
+        Teacher teacher = teacherRepository.save(TeacherFixture.getExampleTeacher());
+        Course course = CourseFixture.getExampleCourse();
+        course.getTeachers().add(teacher);
+        course = courseRepository.save(course);
+
+        mvc.perform(delete(String.format("/courses/%s/teachers/%s",
+                course.getId(), teacher.getId())))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testRemovingNonAssignedTeacherFromCourse() throws Exception {
+        Teacher teacher = teacherRepository.save(TeacherFixture.getExampleTeacher());
+        Course course = courseRepository.save(CourseFixture.getExampleCourse());
+
+        mvc.perform(delete(String.format("/courses/%s/teachers/%s",
+                course.getId(), teacher.getId())))
                 .andExpect(status().is(409));
     }
 }
