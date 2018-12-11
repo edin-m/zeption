@@ -1,11 +1,9 @@
 package io.leres.entities.homework;
 
 import io.leres.entities.Resource;
-import io.leres.entities.UniClass;
 import lombok.*;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import java.time.Instant;
 
 @Entity
@@ -16,8 +14,8 @@ import java.time.Instant;
 @ToString(callSuper = true)
 public class HomeworkAssignment extends Resource {
 
-    @ManyToOne
-    private UniClass uniClass;
+//    @ManyToOne
+//    private UniClass uniClass;
 
     private String text;
 

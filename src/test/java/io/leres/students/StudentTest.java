@@ -18,5 +18,4 @@ public class StudentTest {
 
         assertThat(student1).isNotEqualTo(student2);
     }
-
 }

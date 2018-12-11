@@ -9,5 +9,5 @@ import org.junit.runner.RunWith;
 @RunWith(Cucumber.class)
 @CucumberOptions(features = "classpath:acceptance/students")
 @Category(AcceptanceTests.class)
-public class StudentControllerAT {
+public class StudentAT {
 }

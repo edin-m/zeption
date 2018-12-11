@@ -1,11 +1,9 @@
 package io.leres.entities.homework;
 
 import io.leres.entities.Resource;
-import io.leres.students.Student;
 import lombok.*;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 
 @Entity
 @Data
@@ -14,12 +12,12 @@ import javax.persistence.ManyToOne;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class HomeworkEntry extends Resource {
-
-    @ManyToOne
-    private Student author;
-
-    @ManyToOne
-    private HomeworkAssignment homeworkAssignment;
+//
+//    @ManyToOne
+//    private Student author;
+//
+//    @ManyToOne
+//    private HomeworkAssignment homeworkAssignment;
 
     private String data;
 }

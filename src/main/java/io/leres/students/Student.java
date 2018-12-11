@@ -14,7 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Student extends Resource {
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = false)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
     @JoinColumn(name = "person_info_id")
     private Person person;
 

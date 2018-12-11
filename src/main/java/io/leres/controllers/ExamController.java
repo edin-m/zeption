@@ -2,7 +2,6 @@ package io.leres.controllers;
 
 import io.leres.classes.ClassFinder;
 import io.leres.entities.Exam;
-import io.leres.entities.ExamResult;
 import io.leres.exams.ExamFinder;
 import io.leres.exams.ExamScheduler;
 import io.leres.exams.exceptions.ExamNotFound;
@@ -11,9 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 public class ExamController {
@@ -42,9 +38,9 @@ public class ExamController {
         return examFinder.getExamById(examId);
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/exams/{examId}/results")
-    public List<ExamResult> getExamResults(@PathVariable("examId") long examId) throws ExamNotFound {
-        Exam exam = examFinder.getExamById(examId);
-        return new ArrayList<>(exam.getResults());
-    }
+//    @RequestMapping(method = RequestMethod.GET, path = "/exams/{examId}/results")
+//    public List<ExamResult> getExamResults(@PathVariable("examId") long examId) throws ExamNotFound {
+//        Exam exam = examFinder.getExamById(examId);
+//        return new ArrayList<>(exam.getResults());
+//    }
 }

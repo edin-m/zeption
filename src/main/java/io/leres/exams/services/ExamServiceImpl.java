@@ -7,6 +7,7 @@ import io.leres.exams.exceptions.ExamNotFound;
 import io.leres.exams.exceptions.ExamResultNotFound;
 import io.leres.exams.repo.ExamRepository;
 import io.leres.exams.repo.ExamResultRepository;
+import io.leres.exceptions.NotImplemented;
 import io.leres.students.Student;
 import io.leres.teachers.Teacher;
 import org.springframework.stereotype.Service;
@@ -48,8 +49,9 @@ class ExamServiceImpl implements ExamService {
 
     @Override
     public ExamResult storeExamResult(Exam exam, Student student, int grade) {
-        ExamResult examResult = new ExamResult(exam, student, grade);
-        return examResultRepository.save(examResult);
+//        ExamResult examResult = new ExamResult(exam, student, grade);
+//        return examResultRepository.save(examResult);
+        throw new NotImplemented();
     }
 
     @Override

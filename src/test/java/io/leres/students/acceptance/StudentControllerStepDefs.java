@@ -28,6 +28,8 @@ public class StudentControllerStepDefs extends SharedStepDefs {
     @Autowired
     private StudentRepository studentRepository;
 
+    private static long studentId;
+
     @Before
     public void setUp() {
         setUpWebContext();
@@ -47,15 +49,18 @@ public class StudentControllerStepDefs extends SharedStepDefs {
 
         String body = mapper.writeValueAsString(person);
 
-        mvc.perform(post("/students")
+        String response = mvc.perform(post("/students")
                 .content(body)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
+
+        Student student = mapper.readValue(response, Student.class);
+        studentId = student.getId();
     }
 
-    @When("update the student (\\d+)")
-    public void updateTheStudent(long studentId) throws Exception {
+    @When("update the student")
+    public void updateTheStudent() throws Exception {
         Person person = new Person();
         person.setFirstName("first name modified");
         person.setLastName("last name");
@@ -67,14 +72,14 @@ public class StudentControllerStepDefs extends SharedStepDefs {
                 .andReturn().getResponse().getContentAsString();
     }
 
-    @Then("verify student id (\\d+) first name is (.+)$")
-    public void verifyStudentFirstName(long studentId, String firstName) throws Exception {
+    @Then("verify students first name is (.+)$")
+    public void verifyStudentFirstName(String firstName) throws Exception {
         Student retrievedStudent = getStudentById(studentId);
         assertThat(retrievedStudent.getPerson().getFirstName()).isEqualTo(firstName);
     }
 
-    @Then("verify student id (\\d+) last name is (.+)$")
-    public void verifyStudentLastName(long studentId, String lastName) throws Exception {
+    @Then("verify students last name is (.+)$")
+    public void verifyStudentLastName(String lastName) throws Exception {
         Student retrievedStudent = getStudentById(studentId);
         assertThat(retrievedStudent.getPerson().getLastName()).isEqualTo(lastName);
     }
@@ -87,14 +92,14 @@ public class StudentControllerStepDefs extends SharedStepDefs {
         return mapper.readValue(result, Student.class);
     }
 
-    @When("delete the student id (\\d+)")
-    public void deleteStudent(long studentId) throws Exception {
+    @When("delete the student")
+    public void deleteStudent() throws Exception {
         mvc.perform(delete(String.format("/students/%s", studentId)))
                 .andExpect(status().isOk());
     }
 
-    @Then("verify there is no student id (\\d+)")
-    public void verifyNoStudentExists(long studentId) throws Exception {
+    @Then("verify there is no student")
+    public void verifyNoStudentExists() throws Exception {
         mvc.perform(get(String.format("/students/%s", studentId)))
                 .andExpect(status().is(404));
     }

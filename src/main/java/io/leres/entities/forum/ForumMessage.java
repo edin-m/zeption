@@ -4,7 +4,6 @@ import io.leres.entities.Resource;
 import lombok.*;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import java.time.Instant;
 
 @Entity
@@ -15,11 +14,11 @@ import java.time.Instant;
 @ToString(callSuper = true)
 public class ForumMessage extends Resource {
 
-    @ManyToOne
-    private ForumUser author;
-
-    @ManyToOne
-    private ForumThread thread;
+//    @ManyToOne
+//    private ForumUser author;
+//
+//    @ManyToOne
+//    private ForumThread thread;
 
     private Instant createdAt = Instant.now();
 

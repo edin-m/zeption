@@ -1,12 +1,7 @@
 package io.leres.teachers.services;
 
-import io.leres.teachers.Teacher;
-import io.leres.teachers.exceptions.TeacherAlreadyExists;
-import io.leres.teachers.exceptions.TeacherNotFound;
 import io.leres.teachers.repo.TeacherRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 class TeacherServiceImpl implements TeacherService {
@@ -17,25 +12,5 @@ class TeacherServiceImpl implements TeacherService {
         this.teacherRepository = teacherRepository;
     }
 
-    @Override
-    public Teacher getTeacherById(long teacherId) throws TeacherNotFound {
-        Optional<Teacher> teacher = teacherRepository.findById(teacherId);
 
-        if (!teacher.isPresent()) {
-            throw new TeacherNotFound(teacherId);
-        }
-
-        return teacher.get();
-    }
-
-    @Override
-    public Teacher createTeacher(Teacher teacher) throws TeacherAlreadyExists {
-        Teacher found = teacherRepository.findByPerson_SocialId(teacher.getPerson().getSocialId());
-
-        if (found != null) {
-            throw new TeacherAlreadyExists();
-        }
-
-        return teacherRepository.save(teacher);
-    }
 }

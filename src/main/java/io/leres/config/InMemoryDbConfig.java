@@ -9,7 +9,9 @@ import io.leres.example.posts.repo.PostRepository;
 import io.leres.example.posts.repo.TagRepository;
 import io.leres.exams.repo.ExamRepository;
 import io.leres.exams.repo.ExamResultRepository;
+import io.leres.students.Student;
 import io.leres.students.repo.StudentRepository;
+import io.leres.teachers.Teacher;
 import io.leres.teachers.repo.TeacherRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -28,7 +30,9 @@ import javax.sql.DataSource;
         "io.leres.entities",
         "io.leres.example"
 }, basePackageClasses = {
-        Course.class
+        Course.class,
+        Student.class,
+        Teacher.class
 })
 @EnableJpaRepositories(basePackageClasses = {
         StudentRepository.class,
