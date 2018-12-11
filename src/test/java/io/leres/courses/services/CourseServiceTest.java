@@ -2,6 +2,7 @@ package io.leres.courses.services;
 
 import io.leres.UnitTests;
 import io.leres.courses.Course;
+import io.leres.courses.CourseFixture;
 import io.leres.courses.repo.CourseRepository;
 import io.leres.exceptions.ResourceAlreadyExists;
 import io.leres.exceptions.ResourceNotFound;
@@ -57,8 +58,9 @@ public class CourseServiceTest {
 
     @Test
     public void testCreatingCourseSaves() throws ResourceAlreadyExists {
-        courseService.createCourse(exampleCourse);
+        Course course = courseService.createCourse(exampleCourse);
 
+        assertThat(course.getName()).isEqualTo(exampleCourse.getName());
         verify(courseRepositoryMock).save(any());
     }
 
@@ -66,7 +68,7 @@ public class CourseServiceTest {
     public void testRemovingNonExistingCourseThrows() throws ResourceNotFound {
         when(courseRepositoryMock.existsById(
                 anyLong()
-        )).thenReturn(true);
+        )).thenReturn(false);
 
         courseService.removeCourse(1L);
     }
@@ -75,7 +77,7 @@ public class CourseServiceTest {
     public void testRemovingCourseDelets() throws ResourceNotFound {
         when(courseRepositoryMock.existsById(
                 anyLong()
-        )).thenReturn(false);
+        )).thenReturn(true);
 
         courseService.removeCourse(1L);
 

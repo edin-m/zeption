@@ -1,6 +1,7 @@
 package io.leres.config;
 
 import io.leres.classes.repo.UniClassRepository;
+import io.leres.courses.Course;
 import io.leres.courses.repo.CourseRepository;
 import io.leres.curriculums.repo.CurriculumEntryRepository;
 import io.leres.example.posts.repo.CommentRepository;
@@ -26,6 +27,8 @@ import javax.sql.DataSource;
 @EntityScan(basePackages = {
         "io.leres.entities",
         "io.leres.example"
+}, basePackageClasses = {
+        Course.class
 })
 @EnableJpaRepositories(basePackageClasses = {
         StudentRepository.class,

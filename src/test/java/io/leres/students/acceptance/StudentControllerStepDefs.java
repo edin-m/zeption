@@ -1,49 +1,39 @@
 package io.leres.students.acceptance;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.leres.FirstApplication;
 import io.leres.entities.Person;
 import io.leres.entities.Student;
+import io.leres.helpers.SharedStepDefs;
 import io.leres.students.repo.StudentRepository;
-import io.leres.util.CustomObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootContextLoader;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.context.WebApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @ContextConfiguration(classes = FirstApplication.class, loader = SpringBootContextLoader.class)
 @WebAppConfiguration
 @Slf4j
-public class StudentControllerStepDefs {
-
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    private MockMvc mvc;
-
-    private ObjectMapper mapper = new CustomObjectMapper();
+public class StudentControllerStepDefs extends SharedStepDefs {
 
     @Autowired
     private StudentRepository studentRepository;
 
-    @Given("the web context")
-    public void givenWebContext() throws Exception {
-        mvc = webAppContextSetup(this.webApplicationContext).build();
+    @Before
+    public void setUp() {
+        setUpWebContext();
     }
 
-    @Given("empty database")
+    @Given("empty student repo")
     public void givenEmptyDb() {
         studentRepository.deleteAllInBatch();
     }
@@ -55,7 +45,6 @@ public class StudentControllerStepDefs {
         person.setLastName("last name");
         person.setSocialId("01234");
 
-        ObjectMapper mapper = new CustomObjectMapper();
         String body = mapper.writeValueAsString(person);
 
         mvc.perform(post("/students")
@@ -99,13 +88,13 @@ public class StudentControllerStepDefs {
     }
 
     @When("delete the student id (\\d+)")
-    public void deleteTheStudent(long studentId) throws Exception {
+    public void deleteStudent(long studentId) throws Exception {
         mvc.perform(delete(String.format("/students/%s", studentId)))
                 .andExpect(status().isOk());
     }
 
     @Then("verify there is no student id (\\d+)")
-    public void verifyNoStudentWithStudentId(long studentId) throws Exception {
+    public void verifyNoStudentExists(long studentId) throws Exception {
         mvc.perform(get(String.format("/students/%s", studentId)))
                 .andExpect(status().is(404));
     }

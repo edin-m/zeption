@@ -1,4 +1,4 @@
-package io.leres.students.acceptance;
+package io.leres.courses.acceptance;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
@@ -7,7 +7,7 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(features = "classpath:acceptance/students")
+@CucumberOptions(features = "classpath:acceptance/courses")
 @Category(AcceptanceTests.class)
-public class StudentControllerAT {
+public class CourseControllerAT {
 }

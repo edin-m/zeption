@@ -4,7 +4,9 @@ import io.leres.courses.Course;
 import io.leres.courses.repo.CourseRepository;
 import io.leres.exceptions.ResourceAlreadyExists;
 import io.leres.exceptions.ResourceNotFound;
+import org.springframework.stereotype.Service;
 
+@Service
 class CourseServiceImpl implements CourseService {
 
     private CourseRepository courseRepository;
@@ -29,7 +31,7 @@ class CourseServiceImpl implements CourseService {
 
     @Override
     public void removeCourse(long courseId) throws ResourceNotFound {
-        if (courseRepository.existsById(courseId)) {
+        if (!courseRepository.existsById(courseId)) {
             throw new ResourceNotFound(Course.class, courseId);
         }
 
