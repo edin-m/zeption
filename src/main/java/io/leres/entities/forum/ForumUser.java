@@ -1,8 +1,8 @@
 package io.leres.entities.forum;
 
 import io.leres.entities.Resource;
-import io.leres.entities.Student;
-import io.leres.entities.Teacher;
+import io.leres.students.Student;
+import io.leres.teachers.Teacher;
 import lombok.*;
 
 import javax.persistence.Entity;

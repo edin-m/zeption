@@ -1,7 +1,7 @@
 package io.leres.exams;
 
 import io.leres.entities.Exam;
-import io.leres.entities.Student;
+import io.leres.students.Student;
 import io.leres.exams.exceptions.ExamNotFound;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package io.leres.homework;
 
-import io.leres.entities.Teacher;
+import io.leres.teachers.Teacher;
 import io.leres.entities.UniClass;
 import io.leres.entities.homework.HomeworkAssignment;
 

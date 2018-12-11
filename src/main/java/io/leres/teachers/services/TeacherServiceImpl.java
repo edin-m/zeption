@@ -1,6 +1,6 @@
 package io.leres.teachers.services;
 
-import io.leres.entities.Teacher;
+import io.leres.teachers.Teacher;
 import io.leres.teachers.exceptions.TeacherAlreadyExists;
 import io.leres.teachers.exceptions.TeacherNotFound;
 import io.leres.teachers.repo.TeacherRepository;
@@ -30,7 +30,7 @@ class TeacherServiceImpl implements TeacherService {
 
     @Override
     public Teacher createTeacher(Teacher teacher) throws TeacherAlreadyExists {
-        Teacher found = teacherRepository.findByPersonData_SocialId(teacher.getPersonData().getSocialId());
+        Teacher found = teacherRepository.findByPerson_SocialId(teacher.getPerson().getSocialId());
 
         if (found != null) {
             throw new TeacherAlreadyExists();

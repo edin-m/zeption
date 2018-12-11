@@ -1,7 +1,7 @@
 package io.leres.controllers;
 
 import io.leres.entities.Person;
-import io.leres.entities.Student;
+import io.leres.students.Student;
 import io.leres.exceptions.ResourceAlreadyExists;
 import io.leres.exceptions.ResourceNotFound;
 import io.leres.students.StudentCuder;

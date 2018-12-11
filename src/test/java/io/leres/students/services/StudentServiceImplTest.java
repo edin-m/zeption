@@ -2,11 +2,10 @@ package io.leres.students.services;
 
 import io.leres.UnitTests;
 import io.leres.entities.Person;
-import io.leres.entities.Student;
+import io.leres.students.Student;
 import io.leres.exceptions.ResourceAlreadyExists;
 import io.leres.exceptions.ResourceNotFound;
 import io.leres.students.StudentFixture;
-import io.leres.students.exceptions.StudentNotFound;
 import io.leres.students.repo.StudentRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,16 +30,16 @@ public class StudentServiceImplTest {
     private Student exampleStudent;
 
     @Before
-    public void setUp() throws StudentNotFound {
+    public void setUp() {
         studentRepositoryMock = mock(StudentRepository.class);
 
         studentService = new StudentServiceImpl(studentRepositoryMock);
 
-        exampleStudent = StudentFixture.getDefaultStudent();
+        exampleStudent = StudentFixture.getExampleStudent();
         setupMocks();
     }
 
-    private void setupMocks() throws StudentNotFound {
+    private void setupMocks() {
         when(studentRepositoryMock.findById(
                 anyLong())
         ).thenReturn(Optional.of(exampleStudent));

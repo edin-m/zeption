@@ -2,7 +2,7 @@ package io.leres.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.leres.entities.Person;
-import io.leres.entities.Student;
+import io.leres.students.Student;
 import io.leres.util.CustomObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;

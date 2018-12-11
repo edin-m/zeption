@@ -1,6 +1,7 @@
 package io.leres.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.leres.teachers.Teacher;
 import lombok.*;
 
 import javax.persistence.Entity;

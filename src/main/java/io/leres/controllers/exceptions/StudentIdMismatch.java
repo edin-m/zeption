@@ -1,6 +1,6 @@
 package io.leres.controllers.exceptions;
 
-import io.leres.entities.Student;
+import io.leres.students.Student;
 
 public class StudentIdMismatch extends Exception {
     public StudentIdMismatch(Student student, long studentId) {

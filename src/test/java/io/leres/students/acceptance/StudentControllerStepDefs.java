@@ -6,7 +6,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.leres.FirstApplication;
 import io.leres.entities.Person;
-import io.leres.entities.Student;
+import io.leres.students.Student;
 import io.leres.helpers.SharedStepDefs;
 import io.leres.students.repo.StudentRepository;
 import lombok.extern.slf4j.Slf4j;

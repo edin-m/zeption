@@ -7,6 +7,8 @@ import io.leres.exams.exceptions.ExamNotFound;
 import io.leres.exams.exceptions.ExamResultNotFound;
 import io.leres.exams.repo.ExamRepository;
 import io.leres.exams.repo.ExamResultRepository;
+import io.leres.students.Student;
+import io.leres.teachers.Teacher;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;

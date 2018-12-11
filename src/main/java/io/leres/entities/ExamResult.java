@@ -1,5 +1,6 @@
 package io.leres.entities;
 
+import io.leres.students.Student;
 import lombok.*;
 
 import javax.persistence.Entity;

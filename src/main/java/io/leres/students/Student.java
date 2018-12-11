@@ -1,5 +1,7 @@
-package io.leres.entities;
+package io.leres.students;
 
+import io.leres.entities.Person;
+import io.leres.entities.Resource;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -16,12 +18,4 @@ public class Student extends Resource {
     @JoinColumn(name = "person_info_id")
     private Person person;
 
-
-
-//    @Embedded
-//    private PersonData personData;
-//
-//    public String getFullName() {
-//        return personData.getFirstName() + " " + personData.getLastName();
-//    }
 }

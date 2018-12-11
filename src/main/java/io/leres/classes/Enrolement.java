@@ -1,6 +1,6 @@
 package io.leres.classes;
 
-import io.leres.entities.Student;
+import io.leres.students.Student;
 import io.leres.entities.UniClass;
 import lombok.AllArgsConstructor;
 import lombok.Data;

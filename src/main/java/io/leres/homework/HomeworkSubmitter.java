@@ -1,6 +1,6 @@
 package io.leres.homework;
 
-import io.leres.entities.Student;
+import io.leres.students.Student;
 import io.leres.entities.homework.HomeworkAssignment;
 
 public interface HomeworkSubmitter {

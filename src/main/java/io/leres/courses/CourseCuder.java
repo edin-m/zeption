@@ -8,4 +8,8 @@ public interface CourseCuder {
     Course createCourse(Course example) throws ResourceAlreadyExists;
 
     void removeCourse(long courseId) throws ResourceNotFound;
+
+    CoursePost createCoursePost(Course course, CoursePost example);
+
+    void removeCoursePost(long coursePostId) throws ResourceNotFound;
 }

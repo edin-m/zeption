@@ -1,6 +1,5 @@
 package io.leres.teachers;
 
-import io.leres.entities.Teacher;
 import io.leres.teachers.exceptions.TeacherAlreadyExists;
 
 public interface TeacherCreator {

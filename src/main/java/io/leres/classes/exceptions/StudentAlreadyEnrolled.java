@@ -1,6 +1,6 @@
 package io.leres.classes.exceptions;
 
-import io.leres.entities.Student;
+import io.leres.students.Student;
 import io.leres.entities.UniClass;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

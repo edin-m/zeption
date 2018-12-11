@@ -4,5 +4,5 @@ import io.leres.exceptions.ResourceNotFound;
 
 public interface CourseFinder {
 
-    Course getById(long courseId) throws ResourceNotFound;
+    Course getCourseById(long courseId) throws ResourceNotFound;
 }
