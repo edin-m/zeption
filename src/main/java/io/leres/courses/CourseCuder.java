@@ -11,5 +11,5 @@ public interface CourseCuder {
 
     CoursePost createCoursePost(Course course, CoursePost example);
 
-    void removeCoursePost(long coursePostId) throws ResourceNotFound;
+    void removeCoursePost(CoursePost coursePost);
 }

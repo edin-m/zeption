@@ -130,22 +130,37 @@ public class CourseServiceTest {
 
         assertThat(result.getContent()).isEqualTo(coursePost.getContent());
         assertThat(result.getCourse()).isEqualTo(course);
+        assertThat(course.getPosts()).hasSize(1);
     }
 
     @Test(expected = ResourceNotFound.class)
-    public void testRemovingNonExistingCoursePostThrows() throws ResourceNotFound {
-        when(coursePostRepository.existsById(1L)).thenReturn(true);
+    public void testGettingNonExistingCoursePostsThrows() throws ResourceNotFound {
+        when(coursePostRepository.findById(1L)).thenReturn(Optional.empty());
 
-        courseService.removeCoursePost(1L);
+        courseService.getCoursePostById(1L);
     }
 
     @Test
-    public void testRemovingCoursePostDeletes() throws ResourceNotFound {
-        when(coursePostRepository.existsById(1L)).thenReturn(false);
+    public void testGettingCoursePost() throws ResourceNotFound {
+        when(coursePostRepository.findById(1L))
+                .thenReturn(Optional.of(CourseFixture.getExampleCoursePost()));
 
-        courseService.removeCoursePost(1L);
+        CoursePost coursePost = courseService.getCoursePostById(1L);
 
-        verify(coursePostRepository).deleteById(1L);
+        assertThat(coursePost.getContent()).isNotEmpty();
+    }
+
+    @Test
+    public void testRemovingCoursePostRemovesItFromCoursePostSet() {
+        Course course = CourseFixture.getExampleCourse();
+        CoursePost coursePost = CourseFixture.getExampleCoursePost();
+        course.addPost(coursePost);
+
+        courseService.removeCoursePost(coursePost);
+
+        assertThat(course.getPosts()).hasSize(0);
+        assertThat(coursePost.getCourse()).isNull();
+        verify(coursePostRepository).delete(coursePost);
     }
 
     @Test(expected = AlreadyAssignedToCourse.class)

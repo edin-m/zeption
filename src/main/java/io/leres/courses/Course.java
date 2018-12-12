@@ -55,6 +55,10 @@ public class Course extends Resource {
         student.getCourses().remove(this);
     }
 
+    public boolean hasStudent(Student student) {
+        return students.contains(student);
+    }
+
     public void addTeacher(Teacher teacher) {
         teachers.add(teacher);
         teacher.getCourses().add(this);
@@ -63,5 +67,19 @@ public class Course extends Resource {
     public void removeTeacher(Teacher teacher) {
         teachers.remove(teacher);
         teacher.getCourses().remove(this);
+    }
+
+    public boolean hasTeacher(Teacher teacher) {
+        return teachers.contains(teacher);
+    }
+
+    public void addPost(CoursePost coursePost) {
+        posts.add(coursePost);
+        coursePost.setCourse(this);
+    }
+
+    public void removePost(CoursePost coursePost) {
+        posts.remove(coursePost);
+        coursePost.setCourse(null);
     }
 }

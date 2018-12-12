@@ -17,6 +17,7 @@ import io.leres.util.CustomObjectMapper;
 import io.leres.util.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -62,11 +63,15 @@ public class CourseControllerIT {
     private long courseId;
     private long studentId;
 
+    private Course course;
+    private CoursePost coursePost;
+
     @Before
     public void setUp() {
         courseRepository.deleteAllInBatch();
         coursePostRepository.deleteAllInBatch();
         teacherRepository.deleteAllInBatch();
+        studentRepository.deleteAllInBatch();
     }
 
     @Test
@@ -90,7 +95,7 @@ public class CourseControllerIT {
         CoursePost coursePost = new CoursePost("course post content");
         String body = mapper.writeValueAsString(coursePost);
 
-        String response = mvc.perform(post(String.format("/courses/%s/post", courseId))
+        mvc.perform(post(String.format("/courses/%s/posts", courseId))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
                 .andExpect(status().isOk())
@@ -104,6 +109,32 @@ public class CourseControllerIT {
         assertThat(coursePosts).hasSize(1);
         assertThat(coursePosts.get(0).getCourse().getName())
                 .isEqualTo(CourseFixture.getExampleCourse().getName());
+    }
+
+    @Test
+    @Transactional
+    public void testRemovingCoursePost() throws Exception {
+        setUpCoursePost();
+
+        mvc.perform(delete(String.format("/courses/%s/posts/%s", course.getId(), coursePost.getId())))
+                .andExpect(status().isOk());
+
+        course = courseRepository.getOne(course.getId());
+        assertThat(course.getPosts()).hasSize(0);
+        assertThat(coursePostRepository.findById(coursePost.getId())).isEmpty();
+    }
+
+    @Test
+    @Ignore
+    public void testRemovingCourseRemovesCoursePosts() {
+
+    }
+
+    private void setUpCoursePost() {
+        course = courseRepository.save(CourseFixture.getExampleCourse());
+        coursePost = coursePostRepository.save(CourseFixture.getExampleCoursePost());
+        course.addPost(coursePost);
+        course = courseRepository.save(course);
     }
 
     @Test

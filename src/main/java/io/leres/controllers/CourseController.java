@@ -50,10 +50,17 @@ public class CourseController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/courses/{courseId}/post")
+    @PostMapping("/courses/{courseId}/posts")
     public CoursePost createCoursePost(@PathVariable Long courseId, @RequestBody CoursePost exampleCoursePost) throws ResourceNotFound {
         Course course = courseFinder.getCourseById(courseId);
         return courseCuder.createCoursePost(course, exampleCoursePost);
+    }
+
+    @DeleteMapping("/courses/{courseId}/posts/{coursePostId}")
+    public ResponseEntity<?> removeCoursePost(@PathVariable Long courseId, @PathVariable Long coursePostId) throws ResourceNotFound {
+        CoursePost coursePost = courseFinder.getCoursePostById(coursePostId);
+        courseCuder.removeCoursePost(coursePost);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/courses/{courseId}/students/{studentId}")
