@@ -16,8 +16,8 @@ import java.util.Set;
 @Entity
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true, exclude = {"posts"})
-@ToString(callSuper = true, exclude = {"posts"})
+@EqualsAndHashCode(callSuper = true, exclude = {"posts", "students", "teachers"})
+@ToString(callSuper = true, exclude = {"posts", "students", "teachers"})
 public class Course extends Resource {
 
     public String name;
@@ -43,5 +43,15 @@ public class Course extends Resource {
 
     public Course(String name) {
         this.name = name;
+    }
+
+    public void addStudent(Student student) {
+        students.add(student);
+        student.getCourses().add(this);
+    }
+
+    public void removeStudent(Student student) {
+        students.remove(student);
+        student.getCourses().remove(this);
     }
 }

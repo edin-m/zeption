@@ -71,8 +71,6 @@ public class CourseControllerIT {
 
     @Test
     public void testCreatingCourseWithPost() throws Exception {
-        courseRepository.deleteAllInBatch();
-
         Course course = CourseFixture.getExampleCourse();
         String body = mapper.writeValueAsString(course);
 
@@ -98,7 +96,6 @@ public class CourseControllerIT {
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
-        log.info(response);
         verifyCoursePostIsSavedCorrectly();
     }
 

@@ -1,11 +1,19 @@
 package io.leres.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.leres.IntegrationTests;
+import io.leres.courses.Course;
+import io.leres.courses.CourseFixture;
+import io.leres.courses.repo.CourseRepository;
 import io.leres.entities.Person;
 import io.leres.students.Student;
+import io.leres.students.StudentFixture;
+import io.leres.students.repo.StudentRepository;
 import io.leres.util.CustomObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,12 +22,16 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import javax.transaction.Transactional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Category(IntegrationTests.class)
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @Slf4j
 public class StudentControllerIT {
@@ -27,49 +39,47 @@ public class StudentControllerIT {
     @Autowired
     private MockMvc mvc;
 
-    private Student student;
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private CourseRepository courseRepository;
+
+    private ObjectMapper mapper = new CustomObjectMapper();
+
+    @Before
+    public void setUp() {
+        studentRepository.deleteAllInBatch();
+    }
 
     @Test
-    public void testStudentController() throws Exception {
-        Person person = new Person();
-        person.setFirstName("first name");
-        person.setLastName("last name");
-        person.setSocialId("01234");
-
-        ObjectMapper mapper = new CustomObjectMapper();
+    public void testCreatingStudent() throws Exception {
+        Person person = StudentFixture.getExampleStudent().getPerson();
         String body = mapper.writeValueAsString(person);
 
         mvc.perform(post("/students")
-                .content(body)
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
                 .andExpect(status().isOk());
+
+        assertThat(studentRepository.count()).isEqualTo(1);
     }
 
     @Test
-    public void testGettingStudent() throws Exception {
-        String result = mvc.perform(get("/students/1"))
+    @Transactional
+    public void testDeletingStudentAssignedToCourse() throws Exception {
+        Student student = studentRepository.save(StudentFixture.getExampleStudent());
+        Course course = CourseFixture.getExampleCourse();
+        course.addStudent(student);
+        long courseId = courseRepository.save(course).getId();
+        course = courseRepository.getOne(courseId);
+        student = studentRepository.getOne(student.getId());
+
+        mvc.perform(delete(String.format("/students/%s", student.getId())))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
-        log.info(result);
-
-        ObjectMapper mapper = new CustomObjectMapper();
-        Student student = mapper.readValue(result, Student.class);
-
-        log.info(student.toString());
+        course = courseRepository.getOne(course.getId());
+        assertThat(course.getStudents()).hasSize(0);
     }
-
-//    @Test
-//    public void testGettingAllStudent() throws Exception {
-//        String result = mvc.perform(get("/students"))
-////                .andExpect(status().isOk())
-//                .andReturn().getResponse().getContentAsString();
-//
-//        log.info(result);
-//
-//        List<Student> students = JsonUtils.fromJsonArray(result);
-//        assertThat(students).hasSize(1);
-//    }
-
-
 }

@@ -1,13 +1,18 @@
 package io.leres.students.services;
 
 import io.leres.entities.Person;
-import io.leres.students.Student;
 import io.leres.exceptions.ResourceAlreadyExists;
 import io.leres.exceptions.ResourceNotFound;
+import io.leres.students.Student;
 import io.leres.students.repo.StudentRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.Optional;
+
 @Service
+@Slf4j
 class StudentServiceImpl implements StudentService {
 
     private StudentRepository studentRepository;
@@ -50,11 +55,16 @@ class StudentServiceImpl implements StudentService {
 
     @Override
     public void removeStudent(long studentId) throws ResourceNotFound {
-        if (!studentRepository.existsById(studentId)) {
+        Optional<Student> student = studentRepository.findById(studentId);
+
+        if (!student.isPresent()) {
             throw new ResourceNotFound(Student.class, studentId);
         }
 
-        studentRepository.deleteById(studentId);
+        Student student1 = student.get();
+        student1.getCourses().forEach(course -> course.removeStudent(student1));
+
+        studentRepository.delete(student1);
     }
 
     @Override

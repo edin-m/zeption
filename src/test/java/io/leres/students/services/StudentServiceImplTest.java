@@ -1,6 +1,8 @@
 package io.leres.students.services;
 
 import io.leres.UnitTests;
+import io.leres.courses.Course;
+import io.leres.courses.CourseFixture;
 import io.leres.entities.Person;
 import io.leres.students.Student;
 import io.leres.exceptions.ResourceAlreadyExists;
@@ -103,23 +105,26 @@ public class StudentServiceImplTest {
 
     @Test(expected = ResourceNotFound.class)
     public void testRemovingNonExistingStudentThrows() throws ResourceNotFound {
-        when(studentRepositoryMock.existsById(
+        when(studentRepositoryMock.findById(
                 anyLong()
-        )).thenReturn(false);
+        )).thenReturn(Optional.empty());
 
         studentService.removeStudent(1L);
     }
 
     @Test
-    public void testRemovingNonExistingStudent() throws ResourceNotFound {
-        when(studentRepositoryMock.existsById(
-                anyLong()
-        )).thenReturn(true);
-        doNothing().when(studentRepositoryMock).deleteById(anyLong());
+    public void testRemovingStudent() throws ResourceNotFound {
+        Course course = CourseFixture.getExampleCourse();
+        course.addStudent(exampleStudent);
+        when(studentRepositoryMock.findById(1L)).thenReturn(Optional.of(exampleStudent));
+        doNothing().when(studentRepositoryMock).delete(any(Student.class));
 
         studentService.removeStudent(1L);
 
-        verify(studentRepositoryMock).deleteById(1L);
+        assertThat(exampleStudent.getCourses()).hasSize(0);
+        assertThat(course.getStudents()).hasSize(0);
+        verify(studentRepositoryMock).findById(1L);
+        verify(studentRepositoryMock).delete(any(Student.class));
     }
 
 }
