@@ -71,9 +71,7 @@ public class StudentControllerIT {
         Student student = studentRepository.save(StudentFixture.getExampleStudent());
         Course course = CourseFixture.getExampleCourse();
         course.addStudent(student);
-        long courseId = courseRepository.save(course).getId();
-        course = courseRepository.getOne(courseId);
-        student = studentRepository.getOne(student.getId());
+        course = courseRepository.save(course);
 
         mvc.perform(delete(String.format("/students/%s", student.getId())))
                 .andExpect(status().isOk())

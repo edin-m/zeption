@@ -37,32 +37,9 @@ public class StudentController {
 
     @DeleteMapping("/students/{studentId}")
     public ResponseEntity<?> deleteStudent(@PathVariable("studentId") Long studentId) throws ResourceNotFound {
-        studentCuder.removeStudent(studentId);
+        Student student = studentFinder.getStudentById(studentId);
+        studentCuder.removeStudent(student);
         return ResponseEntity.ok().build();
     }
-
-//    @RequestMapping(method = RequestMethod.GET, path = "/students")
-//    public List<Student> getStudents() {
-//        return studentRetriever.getAllStudents();
-//    }
-//
-//    @RequestMapping(method = RequestMethod.GET, path = "/students/{id}")
-//    public Student getStudentById(@PathVariable("id") Long id) throws StudentNotFound {
-//        return studentRetriever.getStudentById(id);
-//    }
-//
-//    @RequestMapping(method = RequestMethod.POST, path = "/students")
-//    public Student createStudent(@RequestBody Student student) throws StudentAlreadyExists {
-//        return studentCreator.createStudent(student);
-//    }
-//
-//    @RequestMapping(method = RequestMethod.PUT, path = "/students/{id}")
-//    public Student updateStudent(@RequestBody Student student, @PathVariable("id") long studentId)
-//            throws StudentNotFound, StudentIdMismatch {
-//        if (studentId != student.getId()) {
-//            throw new StudentIdMismatch(student, studentId);
-//        }
-//        return studentUpdater.updateStudent(student);
-//    }
 
 }

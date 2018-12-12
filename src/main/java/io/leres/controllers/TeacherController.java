@@ -32,7 +32,8 @@ public class TeacherController {
 
     @DeleteMapping("/teachers/{teacherId}")
     public ResponseEntity<?> deleteTeacher(@PathVariable Long teacherId) throws ResourceNotFound {
-        teacherCuder.removeTeacher(teacherId);
+        Teacher teacher = teacherFinder.getTeacherById(teacherId);
+        teacherCuder.removeTeacher(teacher);
         return ResponseEntity.ok().build();
     }
 }

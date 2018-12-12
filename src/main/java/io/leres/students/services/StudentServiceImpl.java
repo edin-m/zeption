@@ -54,17 +54,9 @@ class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void removeStudent(long studentId) throws ResourceNotFound {
-        Optional<Student> student = studentRepository.findById(studentId);
-
-        if (!student.isPresent()) {
-            throw new ResourceNotFound(Student.class, studentId);
-        }
-
-        Student student1 = student.get();
-        student1.getCourses().forEach(course -> course.removeStudent(student1));
-
-        studentRepository.delete(student1);
+    public void removeStudent(Student student) {
+        student.getCourses().forEach(course -> course.removeStudent(student));
+        studentRepository.delete(student);
     }
 
     @Override

@@ -31,12 +31,9 @@ class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public void removeTeacher(long teacherId) throws ResourceNotFound {
-        if (!teacherRepository.existsById(teacherId)) {
-            throw new ResourceNotFound(Teacher.class, teacherId);
-        }
-
-        teacherRepository.deleteById(teacherId);
+    public void removeTeacher(Teacher teacher) {
+        teacher.getCourses().forEach(course -> course.removeTeacher(teacher));
+        teacherRepository.delete(teacher);
     }
 
     @Override

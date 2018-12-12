@@ -10,5 +10,5 @@ public interface StudentCuder {
 
     Student updateStudentPerson(long studentId, Person person) throws ResourceNotFound;
 
-    void removeStudent(long studentId) throws ResourceNotFound;
+    void removeStudent(Student student);
 }

@@ -1,6 +1,8 @@
 package io.leres.teachers.services;
 
 import io.leres.UnitTests;
+import io.leres.courses.Course;
+import io.leres.courses.CourseFixture;
 import io.leres.exceptions.ResourceAlreadyExists;
 import io.leres.exceptions.ResourceNotFound;
 import io.leres.teachers.Teacher;
@@ -60,20 +62,18 @@ public class TeacherServiceTest {
         verify(teacherRepositoryMock).save(any());
     }
 
-    @Test(expected = ResourceNotFound.class)
-    public void testRemovingNonExistingTeacherThrows() throws ResourceNotFound {
-        when(teacherRepositoryMock.existsById(1L)).thenReturn(false);
-
-        teacherService.removeTeacher(1L);
-    }
-
     @Test
     public void testRemovingTeacherSaves() throws ResourceNotFound {
-        when(teacherRepositoryMock.existsById(1L)).thenReturn(true);
+        Teacher teacher = TeacherFixture.getExampleTeacher();
+        Course course = CourseFixture.getExampleCourse();
+        course.addTeacher(teacher);
+        when(teacherRepositoryMock.findById(1L)).thenReturn(Optional.of(teacher));
 
-        teacherService.removeTeacher(1L);
+        teacherService.removeTeacher(teacher);
 
-        verify(teacherRepositoryMock).deleteById(1L);
+        assertThat(teacher.getCourses()).hasSize(0);
+        assertThat(course.getTeachers()).hasSize(0);
+        verify(teacherRepositoryMock).delete(any(Teacher.class));
     }
 
     @Test(expected = ResourceNotFound.class)

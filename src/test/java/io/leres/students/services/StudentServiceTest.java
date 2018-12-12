@@ -23,7 +23,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @Category(UnitTests.class)
-public class StudentServiceImplTest {
+public class StudentServiceTest {
 
     private StudentRepository studentRepositoryMock;
 
@@ -103,27 +103,15 @@ public class StudentServiceImplTest {
         verify(studentRepositoryMock).findById(1L);
     }
 
-    @Test(expected = ResourceNotFound.class)
-    public void testRemovingNonExistingStudentThrows() throws ResourceNotFound {
-        when(studentRepositoryMock.findById(
-                anyLong()
-        )).thenReturn(Optional.empty());
-
-        studentService.removeStudent(1L);
-    }
-
     @Test
     public void testRemovingStudent() throws ResourceNotFound {
         Course course = CourseFixture.getExampleCourse();
         course.addStudent(exampleStudent);
-        when(studentRepositoryMock.findById(1L)).thenReturn(Optional.of(exampleStudent));
-        doNothing().when(studentRepositoryMock).delete(any(Student.class));
 
-        studentService.removeStudent(1L);
+        studentService.removeStudent(exampleStudent);
 
         assertThat(exampleStudent.getCourses()).hasSize(0);
         assertThat(course.getStudents()).hasSize(0);
-        verify(studentRepositoryMock).findById(1L);
         verify(studentRepositoryMock).delete(any(Student.class));
     }
 
